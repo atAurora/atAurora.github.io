@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="mask-icon" href="https://oss.gleaming.cn/shimei.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ataurora.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":230,"display":"post","padding":30,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于布隆过滤器的思考">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis详解(三):布隆过滤器">
+<meta property="og:url" content="http://ataurora.cn/2021/04/28/Redis-bloom-filter/index.html">
+<meta property="og:site_name" content="鸢尾的blog">
+<meta property="og:description" content="关于布隆过滤器的思考">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss.gleaming.cn/Blog/SourceCode/7896890-204e7440395a31b5.png">
+<meta property="og:image" content="https://oss.gleaming.cn/Blog/SourceCode/7896890-fdbf75a56fb03c02.png">
+<meta property="og:image" content="https://oss.gleaming.cn/Blog/SourceCode/7896890-0beb6acc89d5c927.png">
+<meta property="article:published_time" content="2021-04-28T13:17:01.000Z">
+<meta property="article:modified_time" content="2021-11-21T11:46:06.519Z">
+<meta property="article:author" content="鸢尾">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss.gleaming.cn/Blog/SourceCode/7896890-204e7440395a31b5.png">
+
+<link rel="canonical" href="http://ataurora.cn/2021/04/28/Redis-bloom-filter/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Redis详解(三):布隆过滤器 | 鸢尾的blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">鸢尾的blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ataurora.cn/2021/04/28/Redis-bloom-filter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shimei.jpg">
+      <meta itemprop="name" content="鸢尾">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="鸢尾的blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redis详解(三):布隆过滤器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-28 21:17:01" itemprop="dateCreated datePublished" datetime="2021-04-28T21:17:01+08:00">2021-04-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-21 19:46:06" itemprop="dateModified" datetime="2021-11-21T19:46:06+08:00">2021-11-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+            <div class="post-description">关于布隆过滤器的思考</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>我们假设一种场景:<code>刷抖音</code></p>
+<p>你有<strong>刷到过重复的推荐内容</strong>吗?这么多的推荐内容要推荐给这么多的用户,他是怎么保证每个用户在看推荐内容时,保证不会出现之前已经看过的推荐视频呢?也就是说,抖音时如何实现<strong>推送去重</strong>的呢?</p>
+<p>你会想到服务器 <strong>记录</strong> 了用户看过的 <strong>所有历史记录</strong>,当推荐系统推荐短视频时会从每个用户的历史记录里进行 <strong>筛选</strong>,过滤掉那些已经存在的记录.问题是当 <strong>用户量很大</strong>,每个用户看过的短视频又很多的情况下,这种方式,推荐系统的去重工作 <strong>在性能上跟的上么？</strong></p>
+<p>实际上,如果历史记录存储在关系数据库里,去重就需要频繁地对数据库进行 <code>exists</code> 查询,当系统并发量很高时,数据库是很难抗住压力的.</p>
+<p>你可能又想到了 <strong>缓存</strong>,但是这么多用户这么多的历史记录,如果全部缓存起来,那得需要 <strong>浪费多大的空间</strong> 啊.. <em>(可能老板看一眼账单,看一眼你..)</em> 并且这个存储空间会随着时间呈线性增长,就算你用缓存撑得住一个月,但是又能继续撑多久呢？不缓存性能又跟不上,咋办呢？</p>
+<p><strong>布隆过滤器(Bloom Filter)</strong> 就是这样一种专门用来解决去重问题的高级数据结构.但是跟 <strong>HyperLogLog</strong> 一样,它也一样有那么一点点不精确,也存在一定的误判概率,但它能在解决去重的同时,在 <strong>空间上能节省 90%</strong> 以上,也是非常值得的.</p>
+<h3 id="1-1-什么是布隆过滤器"><a href="#1-1-什么是布隆过滤器" class="headerlink" title="1.1 什么是布隆过滤器"></a>1.1 什么是布隆过滤器</h3><p>布隆过滤器（Bloom filter）是一种非常节省空间的概率数据结构（space-efficient probabilistic data structure）,运行速度快（时间效率）,占用内存小（空间效率）,但是有一定的误判率且无法删除元素.本质上由一个很长的二进制向量和一系列随机映射函数组成.</p>
+<h3 id="1-2-布隆过滤器特性"><a href="#1-2-布隆过滤器特性" class="headerlink" title="1.2 布隆过滤器特性"></a>1.2 布隆过滤器特性</h3><ul>
+<li>检查一个元素是否在集成中;</li>
+<li>检查结果分为2种：<strong>一定不在集合中、可能在集合中</strong>;</li>
+<li>布隆过滤器支持添加元素、检查元素,但是不支持删除元素;</li>
+<li>检查结果的“可能在集合中”说明存在一定误判率;<ul>
+<li>已经添加进入布隆过滤器的元素是不会被误判的,仅未添加过的元素才可能被误判;</li>
+</ul>
+</li>
+<li>相比set、Bitmaps非常节省空间：因为只存储了指纹信息,没有存储元素本身;</li>
+<li>添加的元素超过预设容量越多,误报的可能性越大.</li>
+</ul>
+<p>需要注意的是,虽然使用了无偏hash函数,使得hash值尽可能均匀,但是不同的item计算出的hash值依旧可能重复,所以布隆过滤器返回元素存在,实际是有可能不存在的.</p>
+<h2 id="二、布隆过滤器原理解析"><a href="#二、布隆过滤器原理解析" class="headerlink" title="二、布隆过滤器原理解析"></a>二、布隆过滤器原理解析</h2><p>布隆过滤器本质上是由长度为<code>m</code>的位向量或位列表（仅包含 <code>0</code> 或 <code>1</code> 位值的列表）组成,最初所有的值均设置为 <code>0</code>,所以我们先来创建一个稍微长一些的位向量用作展示：</p>
+<p><img src="https://oss.gleaming.cn/Blog/SourceCode/7896890-204e7440395a31b5.png"></p>
+<p>当我们向布隆过滤器中添加数据时,会使用 <strong>多个</strong> <code>hash</code> 函数对 <code>key</code> 进行运算,算得一个证书索引值,然后对位数组长度进行取模运算得到一个位置,每个 <code>hash</code> 函数都会算得一个不同的位置.再把位数组的这几个位置都置为 <code>1</code> 就完成了 <code>add</code> 操作,例如,我们添加一个 <code>wmyskxz</code>：</p>
+<p><img src="https://oss.gleaming.cn/Blog/SourceCode/7896890-fdbf75a56fb03c02.png"></p>
+<p>向布隆过滤器查查询 <code>key</code> 是否存在时,跟 <code>add</code> 操作一样,会把这个 <code>key</code> 通过相同的多个 <code>hash</code> 函数进行运算,查看 <strong>对应的位置</strong> 是否 <strong>都</strong> 为 <code>1</code>,<strong>只要有一个位为 <code>0</code></strong>,那么说明布隆过滤器中这个 <code>key</code> 不存在.如果这几个位置都是 <code>1</code>,并不能说明这个 <code>key</code> 一定存在,只能说极有可能存在,因为这些位置的 <code>1</code> 可能是因为其他的 <code>key</code> 存在导致的.</p>
+<p>就比如我们在 <code>add</code> 了一定的数据之后,查询一个 <strong>不存在</strong> 的 <code>key</code>：</p>
+<p><img src="https://oss.gleaming.cn/Blog/SourceCode/7896890-0beb6acc89d5c927.png"></p>
+<p>很明显,<code>1/3/5</code> 这几个位置的 <code>1</code> 是因为上面第一次添加的 <code>wmyskxz</code> 而导致的,所以这里就存在 <strong>误判</strong>.幸运的是,布隆过滤器有一个可以预判误判率的公式,比较复杂,感兴趣的朋友可以自行去阅读,比较烧脑.. 只需要记住以下几点就好了：</p>
+<ul>
+<li>使用时 <strong>不要让实际元素数量远大于初始化数量</strong>;</li>
+<li>当实际元素数量超过初始化数量时,应该对布隆过滤器进行 <strong>重建</strong>,重新分配一个 <code>size</code> 更大的过滤器,再将所有的历史元素批量 <code>add</code> 进行;</li>
+</ul>
+<h2 id="三、布隆过滤器底层原理"><a href="#三、布隆过滤器底层原理" class="headerlink" title="三、布隆过滤器底层原理"></a>三、布隆过滤器底层原理</h2><h3 id="3-1-布隆过滤器的底层结构"><a href="#3-1-布隆过滤器的底层结构" class="headerlink" title="3.1 布隆过滤器的底层结构"></a>3.1 布隆过滤器的底层结构</h3><p><strong>布隆过滤器本质是一个巨大的bit数组（bit array）+几个不同的无偏hash函数.</strong></p>
+<p>  布隆过滤器添加一个item(“gleaming”),其操作步骤是：</p>
+<ul>
+<li>使用多个无偏哈希函数对item进行hash运算,得到多个hash值hash(gleaming);</li>
+<li>每个hash值对bit数组取模得到位数组中的位置index(gleaming);</li>
+<li>判断所有index位是否都为1 ;</li>
+<li>位都为1则说明该元素可能已经存在了;</li>
+<li>任意一位不为1则说明一定不存在,此时会将不为1的位置为1;</li>
+</ul>
+<p>需要注意的是,虽然使用了无偏hash函数,使得hash值尽可能均匀,但是不同的item计算出的hash值依旧可能重复,所以布隆过滤器返回元素存在,实际是有可能不存在的.</p>
+<h3 id="3-2-最佳hash函数数量与错误率的关系"><a href="#3-2-最佳hash函数数量与错误率的关系" class="headerlink" title="3.2 最佳hash函数数量与错误率的关系"></a>3.2 最佳hash函数数量与错误率的关系</h3><p>源码中计算hash函数数量的代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># hash函数数量计算公式：</span></span><br><span class="line"></span><br><span class="line"><span class="meta"># ceil(value)：返回不小于value的最小整数；</span></span><br><span class="line"><span class="meta"># log(<span class="meta-keyword">error</span>)：以10为底的对数函数；</span></span><br><span class="line"><span class="meta"># ln(x)：以e为底的对数函数；</span></span><br><span class="line"><span class="meta"># ln(2) ≈ 0.693147180559945;</span></span><br><span class="line"><span class="meta"># ln(2)^2 ≈ 0.480453013918201;</span></span><br><span class="line"></span><br><span class="line">bloom-&amp;gt;hashes = (<span class="keyword">int</span>)<span class="built_in">ceil</span>(<span class="number">0.693147180559945</span> * bloom-&amp;gt;bpe);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">double</span> <span class="title">calc_bpe</span><span class="params">(<span class="keyword">double</span> error)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">double</span> denom = <span class="number">0.480453013918201</span>; <span class="comment">// ln(2)^2</span></span><br><span class="line">    <span class="keyword">double</span> num = <span class="built_in">log</span>(error);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">double</span> bpe = -(num / denom);</span><br><span class="line">    <span class="keyword">if</span> (bpe &amp;lt; <span class="number">0</span>) &#123;</span><br><span class="line">        bpe = -bpe;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bpe;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<table>
+<thead>
+<tr>
+<th>错误率{error_rate}</th>
+<th>hash函数的最佳数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>0.01</td>
+<td>8</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td>11</td>
+</tr>
+<tr>
+<td>0.0001</td>
+<td>15</td>
+</tr>
+<tr>
+<td>0.00001</td>
+<td>18</td>
+</tr>
+<tr>
+<td>0.000001</td>
+<td>21</td>
+</tr>
+<tr>
+<td>0.0000001</td>
+<td>25</td>
+</tr>
+</tbody></table>
+<h3 id="3-3-所需存储空间与错误率及容量的关系"><a href="#3-3-所需存储空间与错误率及容量的关系" class="headerlink" title="3.3 所需存储空间与错误率及容量的关系"></a>3.3 所需存储空间与错误率及容量的关系</h3><table>
+<thead>
+<tr>
+<th>错误率{error_rate}</th>
+<th>元素数量{capacity}</th>
+<th>占用内存（单位M）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.001</td>
+<td>10万</td>
+<td>0.19</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td>1百万</td>
+<td>1.89</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td>1千万</td>
+<td>18.9</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td>1亿</td>
+<td>188.6</td>
+</tr>
+<tr>
+<td>0.0001</td>
+<td>10万</td>
+<td>0.25</td>
+</tr>
+<tr>
+<td>0.0001</td>
+<td>1百万</td>
+<td>2.5</td>
+</tr>
+<tr>
+<td>0.0001</td>
+<td>1千万</td>
+<td>24.6</td>
+</tr>
+<tr>
+<td>0.0001</td>
+<td>1亿</td>
+<td>245.7</td>
+</tr>
+<tr>
+<td>0.00001</td>
+<td>10万</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>0.00001</td>
+<td>1百万</td>
+<td>3.01</td>
+</tr>
+<tr>
+<td>0.00001</td>
+<td>1千万</td>
+<td>30.1</td>
+</tr>
+<tr>
+<td>0.00001</td>
+<td>1亿</td>
+<td>302.9</td>
+</tr>
+</tbody></table>
+<p>占用内存（单位M） = bytes值/1024/1024.</p>
+<p>  从上述对比分析可以看出,<strong>错误率{error_rate}越小,所需的存储空间越大; 初始化设置的元素数量{capacity}越大,所需的存储空间越大,当然如果实际远多于预设时,准确率就会降低.</strong></p>
+<p>  在1千万数据场景下,error_rate为0.001、0.0001、0.00001实际占用内存都是30M以下,此时如果对准确性要求高,初始化时将错误率设置低一点是完全无伤大雅的.</p>
+<p>  RedisBloom官方默认的error_rate是 0.01,默认的capacity是 100,源码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RedisBloom/src/rebloom.c</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">double</span> BFDefaultErrorRate = <span class="number">0.01</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">size_t</span> BFDefaultInitCapacity = <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、布隆过滤器的应用场景"><a href="#四、布隆过滤器的应用场景" class="headerlink" title="四、布隆过滤器的应用场景"></a>四、布隆过滤器的应用场景</h2><h3 id="4-1-邮件黑名单-amp-网站黑名单"><a href="#4-1-邮件黑名单-amp-网站黑名单" class="headerlink" title="4.1 邮件黑名单&amp;网站黑名单"></a>4.1 邮件黑名单&amp;网站黑名单</h3><p>邮箱地址数十亿计且长度不固定,我们需要从海量的邮箱地址中识别出垃圾邮箱地址.当一个邮箱地址被判定为垃圾邮箱后,就将此地址添加进布隆过滤器中即可.</p>
+<p>  同理,万维网上的URL地址中包含了大量的非法或恶意URL,利用布隆过滤器也可以快速判断此类URL.当布隆过滤器返回结果为存在时,才对URL进行进一步判定处理.</p>
+<h3 id="4-2-新闻去重"><a href="#4-2-新闻去重" class="headerlink" title="4.2 新闻去重"></a>4.2 新闻去重</h3><p>对于百度新闻、头条新闻等信息推荐平台,为了尽可能提升用户体验,应最大可能保证推荐给用户的新闻不重复,将已推荐给用户的文章ID存入布隆过滤器,再次推荐时先判断是否已推送即可.</p>
+<h3 id="4-3-缓存穿透-amp-恶意攻击"><a href="#4-3-缓存穿透-amp-恶意攻击" class="headerlink" title="4.3 缓存穿透&amp;恶意攻击"></a>4.3 缓存穿透&amp;恶意攻击</h3><p>缓存穿透：是指查询了缓存和数据库中都没有的数据.当此类查询请求量过大时（比如系统被恶意攻击）,缓存系统或数据库的压力将增大,极容易宕机.</p>
+<p>  方式1：当查询DB中发现某数据不存在时,则将此数据ID存入布隆过滤器,每次查询时先判断是否存在于布隆过滤器,存在则说明数据库无此数据,无需继续查询了.当然此种方式仅能处理同一个ID重复访问的场景.</p>
+<p>  方式2：如果攻击者恶意构造了大量不重复的且数据库中不存在的数据呢,此时可将数据库中已有的数据的唯一ID放入布隆过滤器,每次查询时先判断是否存在于布隆过滤器,存在才调用后端系统查询,则可有效过滤恶意攻击.</p>
+<p>  使用方式1需要防止指定ID最初不存在于DB中,遂将此ID存入“数据不存在的过滤器”中,但后续DB又新增了此ID,因为布隆过滤器不支持删除操作,一旦发生此类场景,就肯定会出现误判了.</p>
+<p>  使用方式2需要注意数据的增量,避免数据库中新增了数据而过滤器中还没有导致无法查询到数据.当然如果此时DB中删除了指定数据,布隆过滤器是无法随之删除指纹标记的.</p>
+<p>  了解了原理方能如臂使指.此外建议,生产数据的ID应定义生成规则及校验规则（比如身份证的最后一位就是校验位）,这样每次查询先判断这个ID是否有效,有效才进行后续的步骤,这样可以充分过滤外部的恶意攻击.</p>
+<h2 id="五、布隆过滤器的优缺点"><a href="#五、布隆过滤器的优缺点" class="headerlink" title="五、布隆过滤器的优缺点"></a>五、布隆过滤器的优缺点</h2><h3 id="5-1-布隆过滤器的优点"><a href="#5-1-布隆过滤器的优点" class="headerlink" title="5.1 布隆过滤器的优点"></a>5.1 布隆过滤器的优点</h3><ul>
+<li>【适合大数据场景】：支持海量数据场景下高效判断元素是否存在;</li>
+<li>【节省空间】：不存储数据本身,仅存储hash结果取模运算后的位标记;</li>
+<li>【数据保密】：不存储数据本身,适合某些保密场景;</li>
+</ul>
+<h3 id="5-2-布隆过滤器的缺点"><a href="#5-2-布隆过滤器的缺点" class="headerlink" title="5.2 布隆过滤器的缺点"></a>5.2 布隆过滤器的缺点</h3><ul>
+<li>误判】：由于存在hash碰撞,匹配结果如果是“存在于过滤器中”,实际不一定存在;</li>
+<li>【不可删除】：没有存储元素本身,所以只能添加但不可删除;</li>
+<li>【空间利用率不高】：创建过滤器时需提前预估创建,当错误率越低时,为了尽可能避免hash碰撞,冗余的空间就越多;需要注意的是,空间利用率不高和节省空间并不冲突;</li>
+<li>【容量满时误报率增加】当容量快满时,hash碰撞的概率变大,插入、查询的错误率也就随之增加了.</li>
+</ul>
+<h3 id="5-3-布隆过滤器的其他问题"><a href="#5-3-布隆过滤器的其他问题" class="headerlink" title="5.3 布隆过滤器的其他问题"></a>5.3 布隆过滤器的其他问题</h3><ul>
+<li>【不支持计数】：同一个元素可以多次插入,但效果和插入一次相同;</li>
+<li>【查询速度受错误率影响】：由于错误率影响hash函数的数量,当hash函数越多,每次插入、查询需做的hash操作就越多;</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>鸢尾
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ataurora.cn/2021/04/28/Redis-bloom-filter/" title="Redis详解(三):布隆过滤器">http://ataurora.cn/2021/04/28/Redis-bloom-filter/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/06/15/computer-network/" rel="prev" title="计算机网络">
+      <i class="fa fa-chevron-left"></i> 计算机网络
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/26/Redis-Persistence/" rel="next" title="Redis详解(二):持久化机制">
+      Redis详解(二):持久化机制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0"><span class="nav-text">一、概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-text">1.1 什么是布隆过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E7%89%B9%E6%80%A7"><span class="nav-text">1.2 布隆过滤器特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90"><span class="nav-text">二、布隆过滤器原理解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">三、布隆过滤器底层原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-text">3.1 布隆过滤器的底层结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%9C%80%E4%BD%B3hash%E5%87%BD%E6%95%B0%E6%95%B0%E9%87%8F%E4%B8%8E%E9%94%99%E8%AF%AF%E7%8E%87%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">3.2 最佳hash函数数量与错误率的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%89%80%E9%9C%80%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E4%B8%8E%E9%94%99%E8%AF%AF%E7%8E%87%E5%8F%8A%E5%AE%B9%E9%87%8F%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">3.3 所需存储空间与错误率及容量的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">四、布隆过滤器的应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E9%82%AE%E4%BB%B6%E9%BB%91%E5%90%8D%E5%8D%95-amp-%E7%BD%91%E7%AB%99%E9%BB%91%E5%90%8D%E5%8D%95"><span class="nav-text">4.1 邮件黑名单&amp;网站黑名单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%96%B0%E9%97%BB%E5%8E%BB%E9%87%8D"><span class="nav-text">4.2 新闻去重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F-amp-%E6%81%B6%E6%84%8F%E6%94%BB%E5%87%BB"><span class="nav-text">4.3 缓存穿透&amp;恶意攻击</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-text">五、布隆过滤器的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-text">5.1 布隆过滤器的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-text">5.2 布隆过滤器的缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.3 布隆过滤器的其他问题</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="鸢尾"
+      src="/images/shimei.jpg">
+  <p class="site-author-name" itemprop="name">鸢尾</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/atAurora" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;atAurora" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:468189840n@gmail.com" title="E-Mail → mailto:468189840n@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">鸢尾</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">93k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:49</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

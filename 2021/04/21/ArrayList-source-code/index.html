@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="mask-icon" href="https://oss.gleaming.cn/shimei.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ataurora.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":230,"display":"post","padding":30,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于源码的一些思考">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ArrayList源码解析">
+<meta property="og:url" content="http://ataurora.cn/2021/04/21/ArrayList-source-code/index.html">
+<meta property="og:site_name" content="鸢尾的blog">
+<meta property="og:description" content="关于源码的一些思考">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-21T13:33:17.000Z">
+<meta property="article:modified_time" content="2021-11-21T11:46:07.527Z">
+<meta property="article:author" content="鸢尾">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ataurora.cn/2021/04/21/ArrayList-source-code/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ArrayList源码解析 | 鸢尾的blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">鸢尾的blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ataurora.cn/2021/04/21/ArrayList-source-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shimei.jpg">
+      <meta itemprop="name" content="鸢尾">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="鸢尾的blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ArrayList源码解析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-21 21:33:17" itemprop="dateCreated datePublished" datetime="2021-04-21T21:33:17+08:00">2021-04-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-21 19:46:07" itemprop="dateModified" datetime="2021-11-21T19:46:07+08:00">2021-11-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">源码</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>18 分钟</span>
+            </span>
+            <div class="post-description">关于源码的一些思考</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="ArrayList的特性"><a href="#ArrayList的特性" class="headerlink" title="ArrayList的特性"></a>ArrayList的特性</h2><p>ArrayList内部使用数组作为存储结构,ArrayList可以理解为数组的扩展对象,封装了常用和非常用的操作数组的方法.以及当数组长度不足时,自动扩容数组.ArrayList的特点如下:</p>
+<ul>
+<li>根据索引查询数据的时间复杂度为O(1);</li>
+<li>在数组中间部分根据索引写入或删除元素效率低;</li>
+<li>写入数组时若数组长度不足则会出发扩容;</li>
+<li>ArrayList允许保存NULL值;</li>
+<li>ArrayList是非线程安全的设计;</li>
+</ul>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><h3 id="重要成员变量"><a href="#重要成员变量" class="headerlink" title="重要成员变量"></a>重要成员变量</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ArrayList默认的容量长度</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义一个空数组对象</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当ArrayList中没有任何对象时，使用该变量赋值，是一个默认的缺省空数组对象</span></span><br><span class="line"><span class="comment">//用于无参构造函数为elementData赋值，或判断数组是否是缺省值</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//ArrayList中真正保存数据的数组</span></span><br><span class="line"><span class="keyword">transient</span> Object[] elementData; <span class="comment">// non-private to simplify nested class access</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//数组中保存的对象的个数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> size;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>elementData:ArrayList中真正储存数据的对象,也证明ArrayList内部是由数组实现的;</li>
+<li>DEFAULT_CAPACITY:它表示数组在一般情况下,初次扩容的长度;</li>
+</ul>
+<blockquote>
+<p>ArrayList默认初始化的长度并不是0;</p>
+</blockquote>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><h4 id="无参构造函数"><a href="#无参构造函数" class="headerlink" title="无参构造函数"></a>无参构造函数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 用缺省的DEFAULTCAPACITY_EMPTY_ELEMENTDATA来赋值给elementData数组</span></span><br><span class="line">  <span class="comment">// 变量定义：static final DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;</span></span><br><span class="line">  <span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这说明通过ArrayList list = new ArrayList()创建一个ArrayList时，初始化长度是0，而不是10。</p>
+</blockquote>
+<h4 id="根据指定容量创建"><a href="#根据指定容量创建" class="headerlink" title="根据指定容量创建"></a>根据指定容量创建</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// initialCapacity是new ArrayList(5)时传递的指定容量</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (initialCapacity &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// 根据initialCapacity实例化elementData对象</span></span><br><span class="line">    <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果传进来的是0，那么则用EMPTY_ELEMENTDATA初始化，这里要跟DEFAULTCAPACITY_EMPTY_ELEMENTDATA做好区分</span></span><br><span class="line">    <span class="comment">// 变量定义：static final EMPTY_ELEMENTDATA = &#123;&#125;</span></span><br><span class="line">    <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal Capacity: &quot;</span>+</span><br><span class="line">                                       initialCapacity);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="根据其他类型集合来初始化"><a href="#根据其他类型集合来初始化" class="headerlink" title="根据其他类型集合来初始化"></a>根据其他类型集合来初始化</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Collection是多种集合（List,Set,Queue）的的顶级接口</span></span><br><span class="line"><span class="comment">// 也就是说，实现Collection接口的对象都可以用来初始化ArrayList</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</span><br><span class="line">  elementData = c.toArray();</span><br><span class="line">  <span class="keyword">if</span> ((size = elementData.length) != <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// c.toArray might (incorrectly) not return Object[] (see 6260652)</span></span><br><span class="line">    <span class="comment">// 调用Arrays.copyOf为elementData赋值</span></span><br><span class="line">    <span class="keyword">if</span> (elementData.getClass() != Object[].class)</span><br><span class="line">      elementData = Arrays.copyOf(elementData, size, Object[].class);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 如果参数长度为0，则用EMPTY_ELEMENTDATA赋值elementData</span></span><br><span class="line">    <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="数组扩容"><a href="#数组扩容" class="headerlink" title="数组扩容"></a>数组扩容</h3><h4 id="主动扩容"><a href="#主动扩容" class="headerlink" title="主动扩容"></a>主动扩容</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 获取最小的扩容长度，0或者10</span></span><br><span class="line">  <span class="keyword">int</span> minExpand = (elementData != DEFAULTCAPACITY_EMPTY_ELEMENTDATA) ? <span class="number">0</span> : DEFAULT_CAPACITY;</span><br><span class="line">  <span class="comment">// 当主动扩容传入的参数大于最小扩容长度时进行扩容，否则不进行扩容</span></span><br><span class="line">  <span class="keyword">if</span> (minCapacity &gt; minExpand) &#123;</span><br><span class="line">    ensureExplicitCapacity(minCapacity);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码为主动扩容,可以通过list.ensureCapacity(参数)由使用者进行主动扩容.</p>
+<p>因为扩容涉及到数组的拷贝,所以源码中加入了判断,当要扩容的长度小于最小扩容长度,则不进行扩容.</p>
+<h4 id="自动扩容"><a href="#自动扩容" class="headerlink" title="自动扩容"></a>自动扩容</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacityInternal</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 先调用calculateCapacity方法，获取要扩容的长度</span></span><br><span class="line">  <span class="comment">// 后调用ensureExplicitCapacity方法，进行扩容</span></span><br><span class="line">  ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">calculateCapacity</span><span class="params">(Object[] elementData, <span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 如果数组是初始化数组，则取DEFAULT_CAPACITY和minCapacity中较大的数作为扩容长度</span></span><br><span class="line">  <span class="comment">// 也就是说，初始化数组的长度是0，如果第一次添加对象，那么minCapacity将是1，数组会扩容到10</span></span><br><span class="line">  <span class="comment">// 所以可以认为，数组初始化是0，当添加第一个对象时，扩容到10</span></span><br><span class="line">  <span class="keyword">if</span> (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) &#123;</span><br><span class="line">    <span class="keyword">return</span> Math.max(DEFAULT_CAPACITY, minCapacity);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> minCapacity;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureExplicitCapacity</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 记录数组的修改次数，这个变量在AbstractList类中，是ArrayList的父类</span></span><br><span class="line">  modCount++;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 确认是否进行扩容，也就是说数组elementData的长度不足以存放对象了</span></span><br><span class="line">  <span class="comment">// 调用grow进行真正的扩容</span></span><br><span class="line">  <span class="keyword">if</span> (minCapacity - elementData.length &gt; <span class="number">0</span>)</span><br><span class="line">    grow(minCapacity);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// elementData的最大长度</span></span><br><span class="line"><span class="comment">// 是一个Integer的最大值-8的长度</span></span><br><span class="line"><span class="comment">// 之所以减8是因为一些虚拟机对数组的实现，需要用减掉的这个8来保存一些头信息</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_ARRAY_SIZE = Integer.MAX_VALUE - <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">grow</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 获取旧的容量</span></span><br><span class="line">  <span class="keyword">int</span> oldCapacity = elementData.length;</span><br><span class="line">  <span class="comment">// 将容量扩大1.5倍, &gt;&gt;1效率更高</span></span><br><span class="line">  <span class="keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);</span><br><span class="line">  <span class="comment">// 做一些逻辑判断，若要扩容的长度小于最小扩容长度，也就是比传入的参数小，则扩容长度取传入的参数</span></span><br><span class="line">  <span class="keyword">if</span> (newCapacity - minCapacity &lt; <span class="number">0</span>)</span><br><span class="line">    newCapacity = minCapacity;</span><br><span class="line">  <span class="comment">// 若要扩容的长度大于Integer.MAX -8,这种极端形况下调用hugeCapacity进行处理</span></span><br><span class="line">  <span class="keyword">if</span> (newCapacity - MAX_ARRAY_SIZE &gt; <span class="number">0</span>)</span><br><span class="line">    newCapacity = hugeCapacity(minCapacity);</span><br><span class="line">  <span class="comment">// 扩容！调用Arrays.copyOf方法</span></span><br><span class="line">  elementData = Arrays.copyOf(elementData, newCapacity);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hugeCapacity</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 如果minCapacity等于负数，有可能是内存溢出了，则抛出OOM异常</span></span><br><span class="line">  <span class="keyword">if</span> (minCapacity &lt; <span class="number">0</span>) <span class="comment">// overflow</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> OutOfMemoryError();</span><br><span class="line">  <span class="comment">// 否则如果确实是大于了Integer.MAX - 8，但在Integer.MAX内，则返回Integer.MAX</span></span><br><span class="line">  <span class="comment">// 但能否扩容成功，要根据JVM虚拟机的实现来看了</span></span><br><span class="line">  <span class="keyword">return</span> (minCapacity &gt; MAX_ARRAY_SIZE) ?</span><br><span class="line">    Integer.MAX_VALUE :</span><br><span class="line">  MAX_ARRAY_SIZE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>自动扩容为原数组长度的1.5倍,用&gt;&gt;1效率更高;</li>
+<li>扩容的最大长度,理想状态下应该是Integer.MAX-8的长度,以为一些JVM实现数组需要保存头信息,会占用数组的长度;</li>
+<li>当极端情况下超过了Integer.MAX-8,则扩容到Integer.MAX;</li>
+</ul>
+<h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><h4 id="get方法"><a href="#get方法" class="headerlink" title="get方法"></a>get方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 检测索引是否越界</span></span><br><span class="line">  rangeCheck(index);</span><br><span class="line">  <span class="comment">// 从数组中找到数据并返回，时间复杂度的O(1)</span></span><br><span class="line">  <span class="keyword">return</span> elementData(index);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rangeCheck</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 检测索引是否越界，如果越界则抛出异常</span></span><br><span class="line">  <span class="keyword">if</span> (index &gt;= size)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(outOfBoundsMsg(index));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">outOfBoundsMsg</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&quot;Index: &quot;</span>+index+<span class="string">&quot;, Size: &quot;</span>+size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">E <span class="title">elementData</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 返回数组中制定索引的数据</span></span><br><span class="line">  <span class="keyword">return</span> (E) elementData[index];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>get方法的时间复杂度为$\mathrm O(1)$</p>
+</blockquote>
+<h4 id="set方法"><a href="#set方法" class="headerlink" title="set方法"></a>set方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">set</span><span class="params">(<span class="keyword">int</span> index, E element)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 检测索引越界</span></span><br><span class="line">        rangeCheck(index);</span><br><span class="line">        <span class="comment">// 获取索引对应的值，将索引位置的值设置成element，然后返回旧值，时间复杂度是O(1)</span></span><br><span class="line">        E oldValue = elementData(index);</span><br><span class="line">        elementData[index] = element;</span><br><span class="line">        <span class="keyword">return</span> oldValue;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>set方法的时间复杂度为$\mathrm O(1)$</p>
+</blockquote>
+<h4 id="add方法"><a href="#add方法" class="headerlink" title="add方法"></a>add方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 将ArrayList长度+1，然后调用内部扩容函数</span></span><br><span class="line">  <span class="comment">// 若数组还有空间则不会进行扩容</span></span><br><span class="line">  ensureCapacityInternal(size + <span class="number">1</span>);</span><br><span class="line">  <span class="comment">// 保存到数组最后面</span></span><br><span class="line">  elementData[size++] = e;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (minCapacity - elementData.length &gt; <span class="number">0</span>)</span><br><span class="line">    grow(minCapacity);</span><br></pre></td></tr></table></figure>
+
+<p>如果elementData.length的长度小于minCapacity(也就是size+1),那么会将数组扩容1.5倍.</p>
+<blockquote>
+<p>不触发扩容的情况下add(E e)的时间复杂度是O(1)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E element)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 判断索引是否越界</span></span><br><span class="line">  rangeCheckForAdd(index);</span><br><span class="line">  <span class="comment">// 触发扩容</span></span><br><span class="line">  ensureCapacityInternal(size + <span class="number">1</span>);</span><br><span class="line">  <span class="comment">// 将index位置后的元素统一向后移动</span></span><br><span class="line">  System.arraycopy(elementData, index, elementData, index + <span class="number">1</span>,</span><br><span class="line">                   size - index);</span><br><span class="line">  <span class="comment">// 将数组保存到索引位置，并将长度+1</span></span><br><span class="line">  elementData[index] = element;</span><br><span class="line">  size++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rangeCheckForAdd</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 索引不能大于ArrayList的size，并且不能小于0</span></span><br><span class="line">  <span class="keyword">if</span> (index &gt; size || index &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(outOfBoundsMsg(index));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>调用add(int index, E element)效率并不高，每次add一个元素，都要移动该元素后面的所有元素。最坏的情况下时间复杂度是O(n)</p>
+</blockquote>
+<h4 id="remove方法"><a href="#remove方法" class="headerlink" title="remove方法"></a>remove方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 检查索引越界</span></span><br><span class="line">  rangeCheck(index);</span><br><span class="line">  <span class="comment">// 记录修改次数</span></span><br><span class="line">  modCount++;</span><br><span class="line">  <span class="comment">// 获取要被删除的元素，准备在方法结束时返回给调用者</span></span><br><span class="line">  E oldValue = elementData(index);</span><br><span class="line">  <span class="comment">// 这里做了一个判断，如果删除的不是最后一个元素，则需要将index后的元素向前移动</span></span><br><span class="line">  <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</span><br><span class="line">    System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</span><br><span class="line">                     numMoved);</span><br><span class="line">  <span class="comment">// 将最后一个元素位置置为null，便于GC回收</span></span><br><span class="line">  elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span></span><br><span class="line">  <span class="keyword">return</span> oldValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与add(int index, E element)类似，如果从中间删除时，数组会将index后的元素统一向前移动。</p>
+<blockquote>
+<p>从数组中间位置删除元素效率低的原因就在于此，最坏的情况下时间复杂度是O(n)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果对象是null，则找到第一个null元素的索引，并从数组中删除，查找方式是从前到后</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; size; index++)</span><br><span class="line">      <span class="keyword">if</span> (elementData[index] == <span class="keyword">null</span>) &#123;</span><br><span class="line">        fastRemove(index);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 如果对象不是null，则找到对象的索引，从数组中删除，查找方式也是从前到后</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; size; index++)</span><br><span class="line">      <span class="keyword">if</span> (o.equals(elementData[index])) &#123;</span><br><span class="line">        fastRemove(index);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fastRemove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 记录数组操作次数</span></span><br><span class="line">  modCount++;</span><br><span class="line">  <span class="comment">// 如果删除的元素不在数组尾部，则需要向前移动数组</span></span><br><span class="line">  <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</span><br><span class="line">    System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</span><br><span class="line">                     numMoved);</span><br><span class="line">  <span class="comment">// 最后以为元素设置为null，便于GC回收</span></span><br><span class="line">  elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>remove(Object o)的做法是先循环找到o对应的index，然后跟remove(int index)执行差不多逻辑，将index后面的数据向前移动。</p>
+<blockquote>
+<p>remove(Object o)，从前向后查找元素，并将后面的元素向前移动，所以它的时间复杂度是是O(n)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// c不能为null</span></span><br><span class="line">  Objects.requireNonNull(c);</span><br><span class="line">  <span class="comment">// 核心方法在这里，传入false代表删除elementData和c中重复的元素</span></span><br><span class="line">  <span class="keyword">return</span> batchRemove(c, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// c不能为null</span></span><br><span class="line">  Objects.requireNonNull(c);</span><br><span class="line">  <span class="comment">// 核心方法在这里，传入true代表保留elementData和c中重复的元素，删除不通的元素，可以理解为取交集</span></span><br><span class="line">  <span class="keyword">return</span> batchRemove(c, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">batchRemove</span><span class="params">(Collection&lt;?&gt; c, <span class="keyword">boolean</span> complement)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> Object[] elementData = <span class="keyword">this</span>.elementData;</span><br><span class="line">  <span class="keyword">int</span> r = <span class="number">0</span>, w = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">boolean</span> modified = <span class="keyword">false</span>;</span><br><span class="line">  <span class="comment">// 使用try-finally结构，支持快速失败</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 将两个数组中重复的元素，被后一个元素前移，替换掉</span></span><br><span class="line">    <span class="keyword">for</span> (; r &lt; size; r++)</span><br><span class="line">      <span class="keyword">if</span> (c.contains(elementData[r]) == complement)</span><br><span class="line">        elementData[w++] = elementData[r];</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// 删除数组尾部无用的元素</span></span><br><span class="line">    <span class="keyword">if</span> (r != size) &#123;</span><br><span class="line">      System.arraycopy(elementData, r,</span><br><span class="line">                       elementData, w,</span><br><span class="line">                       size - r);</span><br><span class="line">      w += size - r;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (w != size) &#123;</span><br><span class="line">      <span class="comment">// clear to let GC do its work</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = w; i &lt; size; i++)</span><br><span class="line">        elementData[i] = <span class="keyword">null</span>;</span><br><span class="line">      modCount += size - w;</span><br><span class="line">      size = w;</span><br><span class="line">      modified = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> modified;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>removeAll方法是用来删除两个数组中都存在的数据；</li>
+<li>retainAll方法是用来删除两个数组中不一致的数据；</li>
+</ul>
+<blockquote>
+<p>核心方法是batchRemove方法中，确保时间复杂度的一个不确定因素是c.contains方法，如果该方法的时间复杂度是O(1)，那么整个batchRemove的时间复杂度将会是O(n)。</p>
+</blockquote>
+<h3 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 从前到后查找</span></span><br><span class="line">  <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">      <span class="keyword">if</span> (elementData[i]==<span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">      <span class="keyword">if</span> (o.equals(elementData[i]))</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lastIndexOf</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 从后到前查找</span></span><br><span class="line">  <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size-<span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">      <span class="keyword">if</span> (elementData[i]==<span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size-<span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">      <span class="keyword">if</span> (o.equals(elementData[i]))</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>indexOf和lastIndexOf的时间复杂度都是O(n)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 调用indexOf来判断是否存在</span></span><br><span class="line">  <span class="keyword">return</span> indexOf(o) &gt;= <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里就验证了batchRemove方法中c.contains会确定该方法的时间复杂度的说法。如果removeAll传入的参数也是一个ArrayList，那么removeAll方法是时间复杂度将会是$\mathrm O(\mathrm n\hat{}2)$</p>
+</blockquote>
+<h3 id="trimToSize"><a href="#trimToSize" class="headerlink" title="trimToSize"></a>trimToSize</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trimToSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  modCount++;</span><br><span class="line">  <span class="comment">// 如果elementData的长度大于ArrayList的size，则说明有剩余空间，可以进行裁剪</span></span><br><span class="line">  <span class="keyword">if</span> (size &lt; elementData.length) &#123;</span><br><span class="line">    elementData = (size == <span class="number">0</span>)</span><br><span class="line">      ? EMPTY_ELEMENTDATA</span><br><span class="line">      : Arrays.copyOf(elementData, size);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>虽然ArrayList没有自动缩容的功能,但提供了方法,可以让使用者主动调用,进行空间的释放.</p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>ArrayList内部是由数组实现的；</li>
+<li>ArrayList在创建时候可以指定数组容量；</li>
+<li>ArrayList的get和set方法的时间复杂度是O(1)，添加元素到尾部的时间复杂度是O(1)；</li>
+<li>ArrayList内部数组容量不足时会自动扩容，扩容比例是1.5倍；</li>
+<li>ArrayList从数组中间删除或添加元素性能不高；</li>
+</ul>
+<blockquote>
+<p>所以，ArrayList的适用与顺序添加元素到数组中，并可以通过索引检索数据的场景，如果可以确定元素个数还可以减少扩容次数。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>鸢尾
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ataurora.cn/2021/04/21/ArrayList-source-code/" title="ArrayList源码解析">http://ataurora.cn/2021/04/21/ArrayList-source-code/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/23/LinkedList-source-code/" rel="prev" title="LinkedList源码分析">
+      <i class="fa fa-chevron-left"></i> LinkedList源码分析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/13/Why-two-survivor-spaces/" rel="next" title="JVM新生代为什么需要两个Survivor空间">
+      JVM新生代为什么需要两个Survivor空间 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-text">ArrayList的特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A0%81"><span class="nav-text">源码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F"><span class="nav-text">重要成员变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-text">构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E5%8F%82%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-text">无参构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E6%8C%87%E5%AE%9A%E5%AE%B9%E9%87%8F%E5%88%9B%E5%BB%BA"><span class="nav-text">根据指定容量创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E9%9B%86%E5%90%88%E6%9D%A5%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">根据其他类型集合来初始化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E6%89%A9%E5%AE%B9"><span class="nav-text">数组扩容</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E5%8A%A8%E6%89%A9%E5%AE%B9"><span class="nav-text">主动扩容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%89%A9%E5%AE%B9"><span class="nav-text">自动扩容</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#get%E6%96%B9%E6%B3%95"><span class="nav-text">get方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#set%E6%96%B9%E6%B3%95"><span class="nav-text">set方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#add%E6%96%B9%E6%B3%95"><span class="nav-text">add方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#remove%E6%96%B9%E6%B3%95"><span class="nav-text">remove方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95"><span class="nav-text">其他方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimToSize"><span class="nav-text">trimToSize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="鸢尾"
+      src="/images/shimei.jpg">
+  <p class="site-author-name" itemprop="name">鸢尾</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/atAurora" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;atAurora" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:468189840n@gmail.com" title="E-Mail → mailto:468189840n@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">鸢尾</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">93k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:49</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
