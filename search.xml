@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>CSS选择器</title>
-    <url>/2021/11/22/null/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>html语义化理解及SEO</title>
     <url>/2021/11/22/html-semantic-seo/</url>
     <content><![CDATA[<h2 id="1-语义化"><a href="#1-语义化" class="headerlink" title="1. 语义化"></a>1. 语义化</h2><h3 id="1-1-含义"><a href="#1-1-含义" class="headerlink" title="1.1 含义"></a>1.1 含义</h3><p><strong>语义化是指根据内容的结构化（内容语义化），选择合适的标签（代码语义化）</strong>。通俗的来讲就是正确的标签做正确的事情。</p>
