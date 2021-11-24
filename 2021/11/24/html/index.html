@@ -1,101 +1,263 @@
-<?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>CSS选择器</title>
-    <url>/2021/11/22/null/</url>
-    <content><![CDATA[<p><img src="/2021/11/22/null/shimei.jpg" alt="shimei"></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>html语义化理解及SEO</title>
-    <url>/2021/11/22/html-semantic-seo/</url>
-    <content><![CDATA[<h2 id="1-语义化"><a href="#1-语义化" class="headerlink" title="1. 语义化"></a>1. 语义化</h2><h3 id="1-1-含义"><a href="#1-1-含义" class="headerlink" title="1.1 含义"></a>1.1 含义</h3><p><strong>语义化是指根据内容的结构化（内容语义化），选择合适的标签（代码语义化）</strong>。通俗的来讲就是正确的标签做正确的事情。</p>
-<h3 id="1-2-优点"><a href="#1-2-优点" class="headerlink" title="1.2 优点"></a>1.2 优点</h3><ul>
-<li>  对机器友好，带有语义的文字表现力丰富，更适合搜索引擎的爬虫爬取有效信息，有利于SEO。除此之外，语义类还支持读屏软件，根据文章可以自动生成目录；</li>
-<li>  对开发者友好，使用语义类标签增强了可读性，结构更加清晰，开发者能清晰的看出网页的结构，便于团队的开发与维护。</li>
-</ul>
-<h3 id="1-3-常见的语义化标签"><a href="#1-3-常见的语义化标签" class="headerlink" title="1.3 常见的语义化标签"></a>1.3 常见的语义化标签</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span><span class="tag">&lt;/<span class="name">header</span>&gt;</span>  头部</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">nav</span>&gt;</span><span class="tag">&lt;/<span class="name">nav</span>&gt;</span>  导航栏</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">section</span>&gt;</span><span class="tag">&lt;/<span class="name">section</span>&gt;</span>  区块（有语义化的div）</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span>&gt;</span><span class="tag">&lt;/<span class="name">main</span>&gt;</span>  主要区域</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">article</span>&gt;</span><span class="tag">&lt;/<span class="name">article</span>&gt;</span>  主要内容</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">aside</span>&gt;</span><span class="tag">&lt;/<span class="name">aside</span>&gt;</span>  侧边栏</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span><span class="tag">&lt;/<span class="name">footer</span>&gt;</span>  底部</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://oss.gleaming.cn/shimei.jpg">
+  <link rel="mask-icon" href="https://oss.gleaming.cn/shimei.jpg" color="#222">
 
-<h3 id="1-4-写语义化代码应该注意什么"><a href="#1-4-写语义化代码应该注意什么" class="headerlink" title="1.4 写语义化代码应该注意什么"></a>1.4 写语义化代码应该注意什么</h3><ul>
-<li>  尽可能少的使用无语义的标签div和span；在语义不明显时，既可以使用div或者p时，尽量用p, 因为p在默认情况下有上下间距，对兼容特殊终端有利；</li>
-<li>  不要使用纯样式标签，如：b、font、u等，改用css设置。需要强调的文本，可以包含在strong或者em标签中（浏览器预设样式，能用CSS指定就不用他们），strong默认样式是加粗（不要用b），em是斜体（不用i）；</li>
-<li>  使用表格时，标题要用caption，表头用thead，主体部分用tbody包围，尾部用tfoot包围。表头和一般单元格要区分开，表头用th，单元格用td；</li>
-<li>  表单域要用fieldset标签包起来，并用legend标签说明表单的用途；每个input标签对应的说明文本都需要使用label标签，并且通过为input设置id属性，在lable标签中设置for=someld来让说明文本和相对应的input关联起来</li>
-</ul>
-<h2 id="2-SEO"><a href="#2-SEO" class="headerlink" title="2. SEO"></a>2. SEO</h2><h3 id="2-1-TKD-设置"><a href="#2-1-TKD-设置" class="headerlink" title="2.1 TKD 设置"></a>2.1 TKD 设置</h3><ul>
-<li><p>  页面 TKD 要包含品牌词及业务词，提升页面排名</p>
-</li>
-<li><p>例如：掘金的 TKD</p>
-<ul>
-<li>  Title：掘金 - 代码不止，掘金不停</li>
-<li>  Keywords：掘金,稀土,Vue.js,前端面试题,nginx配置,Kotlin,RxJava,React Native,敏捷开发,Python</li>
-<li>  Description：掘金是一个帮助开发者成长的社区,是给开发者用的 <code>Hacker News</code>,给设计师用的 <code>Designer News</code>,和给产品经理用的 <code>Medium</code>。掘金的技术文章由稀土上聚集的技术大牛和极客共同编辑为你筛选出最优质的干货,其中包括：<code>Android、iOS</code>、前端、后端等方面的内容。用户每天都可以在这里找到技术世界的头条内容。与此同时,掘金内还有沸点、掘金翻译计划、线下活动、专栏文章等内容。即使你是 <code>GitHub、StackOverflow、</code>开源中国的用户,我们相信你也可以在这里有所收获。</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-2-页面内容优化"><a href="#2-2-页面内容优化" class="headerlink" title="2.2 页面内容优化"></a>2.2 页面内容优化</h3><ol>
-<li> 网页代码语义化调整：多使用语义化标签，便于爬虫搜索。</li>
-<li> 页面内容关键词强化：在页面大小标题和文案中重复关键词，以达到内容强化目的；关键词汇避免使用图片，便于爬虫检索，收录。</li>
-<li> img 添加 alt 属性，用 h1 标签写内容关键字。</li>
-</ol>
-<p>引导链接</p>
-<ul>
-<li>  网站底部推荐部分保留产品介绍、常见问题汇总等降低跳出率的引导，提高页面留存与转化；或者与所推荐页面形成互链形式，以稳定页面流量权重。</li>
-</ul>
-<h3 id="2-3-移动端优化"><a href="#2-3-移动端优化" class="headerlink" title="2.3 移动端优化"></a>2.3 移动端优化</h3><ul>
-<li>  设置移动页面，或者将 pc 页面设置为自适应，增加移动端搜索的体验和留存转化</li>
-<li>移动页面设计需注意以下原则：<ol>
-<li> 页面字体、字符大小、文本行间距等设计，应适合手机用户阅读，不可明显过大过小，正文文本字号不小于 10pt（pt：绝对单位，等于1/72英寸）。</li>
-<li> 首屏主体内容必须占屏幕的 50% 以上。</li>
-<li> 主体内容应与其它板块有明显区分，且位于屏幕的中心位置，使用户获取信息是不受任何干扰。</li>
-<li> 导航的功能与位置明确，避免用户使用过程中被误导</li>
-<li> 除以上提到的内容外，网站还应避免其他影响页面内容辨识的情况，例如页面出现大面积空白、文本无任何排版、段落/图片排版错乱不整齐、主体内容展示不全等。</li>
-</ol>
-</li>
-</ul>
-<h3 id="2-4-站外优化"><a href="#2-4-站外优化" class="headerlink" title="2.4 站外优化"></a>2.4 站外优化</h3><ol>
-<li> 在搜索引擎排名较高的公众平台发布正面网站信息，以建设良好口碑；负面信息排名较高的需删除或者屏蔽处理。</li>
-<li> 百度，互动，搜狗等百科的创建更新与维护，(互动百科在今日头条有着较高的排名，现在今日头条也在发展搜素引擎)，百科对树立品牌形象较为重要。</li>
-<li> 公关舆情传播，宣传新闻源发布。</li>
-<li> 站外推广与外链建设。</li>
-<li> 根据竞争对手及品牌业务分析，拓展高质量、高权重的外链渠道、科技论坛、自媒体平台、分类信息网等，发布高质量锚文本外链，另进行友情链接交换，以提高关键词排名及自然流量。</li>
-</ol>
-]]></content>
-      <categories>
-        <category>HTML</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>script标签defer和async的区别，还有哪些属性？</title>
-    <url>/2021/11/21/script-attribute/</url>
-    <content><![CDATA[<h2 id="1-defer-和-async-属性出现的意义"><a href="#1-defer-和-async-属性出现的意义" class="headerlink" title="1. defer 和 async 属性出现的意义"></a>1. defer 和 async 属性出现的意义</h2><p>如果没有defer或async属性，浏览器会立即加载并执行相应的脚本。它不会等待后续加载的文档元素，读取到就会开始加载和执行，这样就阻塞了后续文档的加载。</p>
-<h3 id="1-1-defer-属性"><a href="#1-1-defer-属性" class="headerlink" title="1.1 defer 属性"></a>1.1 defer 属性</h3><p>推迟执行脚本。表示脚本可以延迟到文档完全被解析和显示之后再执行。只对外部脚本文件有效。</p>
-<ul>
-<li>  在 &lt;script&gt; 标签上设置 defer 属性，相当于告诉浏览器立即下载，但延迟执行。也就是说，脚本会被延迟到整个页面都解析完毕后再运行。</li>
-<li>  HTML5 规范要求脚本应该按照它们出现的顺序执行，因此第一个推迟的脚本会在第二个推迟的脚本之前执行，并且会在 DOMContentLoaded 事件之前执行。不过在实际当中，不一定总会按照顺序或者在 DOMContentLoaded 事件之前执行。</li>
-</ul>
-<h3 id="1-2-async-属性（HTML5）"><a href="#1-2-async-属性（HTML5）" class="headerlink" title="1.2 async 属性（HTML5）"></a>1.2 async 属性（<strong>HTML5</strong>）</h3><p>异步执行脚本。表示应该立即请求脚本，并尽快解析和执行，但不能阻止其它页面动作，比如下载资源或等待其他脚本加载。只对外部脚本文件有效。</p>
-<ul>
-<li>  告诉浏览器立即下载，但不必等脚本下载和执行完后再加载页面，同样也不必等到该异步脚本下载和执行完后在加载其它脚本。（因此，异步脚本不应该在加载期间修改 DOM）</li>
-<li>  标记为 async 的脚本并不保证能按照它们出现的次序执行。异步脚本保证会在页面的的 <strong>load</strong> 事件前执行，但可能会在 <strong>DOMContentLoaded</strong> 之前或之后。</li>
-</ul>
-<h2 id="2-lt-script-gt-标签其它属性"><a href="#2-lt-script-gt-标签其它属性" class="headerlink" title="2. &lt;script&gt; 标签其它属性"></a>2. &lt;script&gt; 标签其它属性</h2><h3 id="2-1-charset-属性"><a href="#2-1-charset-属性" class="headerlink" title="2.1 charset 属性"></a>2.1 charset 属性</h3><p>使用 src 属性指定的代码字符集。很少使用，因为大多数浏览器不在乎它的值。</p>
-<h3 id="2-2-crossorigin-属性"><a href="#2-2-crossorigin-属性" class="headerlink" title="2.2 crossorigin 属性"></a>2.2 crossorigin 属性</h3><p>那些没有通过标准CORS (跨域资源共享)检查的正常script 元素传递最少的信息到 window.onerror。可以使用本属性来使那些将静态资源放在另外一个域名的站点打印错误信息。默认不使用 CORS，“” 相当于 “anonymous” ，对此元素的 CORS 请求不设置凭据标志；“use-credentials”，对此元素的 CORS 请求将设置凭证标志，这意味着请求将提供凭据。</p>
-<h3 id="2-3-integrity-属性"><a href="#2-3-integrity-属性" class="headerlink" title="2.3 integrity 属性"></a>2.3 integrity 属性</h3><p>允许对比接收到的资源和指定的加密签名以验证子资源完整性（SRI）。如果接收到的资源的签名与这个属性指定的签名不匹配，则页面会报错，脚本不会执行。这个属性可以用于确保内容分发网络（CDN）不会提供恶意内容。</p>
-<h3 id="2-4-nomodule-属性"><a href="#2-4-nomodule-属性" class="headerlink" title="2.4 nomodule 属性"></a>2.4 nomodule 属性</h3><p>这个布尔属性被设置来标明这个脚本在支持 ES2015 modules 的浏览器中不执行。实际上，这可用于在不支持模块化 JavaScript 的旧浏览器中提供回退脚本。</p>
-<h3 id="2-5-language-属性"><a href="#2-5-language-属性" class="headerlink" title="2.5 language 属性"></a>2.5 language 属性</h3><p>废弃。最初用于表示代码块中的脚本语言。大多数浏览器都会忽略这个属性，不应该再使用它。</p>
-<h3 id="2-6-src-属性"><a href="#2-6-src-属性" class="headerlink" title="2.6 src 属性"></a>2.6 src 属性</h3><p>定义引用外部脚本的URI，这可以用来代替直接在文档中嵌入脚本。指定了 src 属性的script元素标签内不应该再有嵌入的脚本。</p>
-<h3 id="2-7-type-属性"><a href="#2-7-type-属性" class="headerlink" title="2.7 type 属性"></a>2.7 type 属性</h3><p>代替 language，表示代码块中脚本语言的内容类型（也称 MIME 类型：<strong><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></strong>）。支持的MIME类型包括text/javascript, text/ecmascript, application/javascript（非IE支持）, 和application/ecmascript（非IE支持）。如果没有定义这个属性，脚本会被视作JavaScript。如果MIME类型不是JavaScript类型（上述支持的类型），则该元素所包含的内容会被当作数据块而不会被浏览器执行。JS 文件中的MIME 类型通常是 “application/x-javascript” 。如果type属性为module，代码会被当作JavaScript模块 。</p>
-<h3 id="2-8-text-属性"><a href="#2-8-text-属性" class="headerlink" title="2.8 text 属性"></a>2.8 text 属性</h3><p>和 textContent 属性类似，本属性用于设置元素的文本内容。但和 textContent 不一样的是，本属性在节点插入到DOM之后，此属性被解析为可执行代码。</p>
-]]></content>
-      <categories>
-        <category>HTML</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>HTML面试题</title>
-    <url>/2021/11/24/html/</url>
-    <content><![CDATA[<h2 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h2><p><img src="/2021/11/24/html/01.HTML%E9%9D%A2%E8%AF%95%E9%A2%98.png" alt="01.HTML面试题"></p>
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ataurora.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":230,"display":"post","padding":30,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="备忘录，HTML总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML面试题">
+<meta property="og:url" content="http://ataurora.cn/2021/11/24/html/index.html">
+<meta property="og:site_name" content="Iris&#39;s blog">
+<meta property="og:description" content="备忘录，HTML总结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ataurora.cn/2021/11/24/html/01.HTML%E9%9D%A2%E8%AF%95%E9%A2%98.png">
+<meta property="og:image" content="http://ataurora.cn/2021/11/24/html/01-4.png">
+<meta property="og:image" content="http://ataurora.cn/2021/11/24/html/01-6.png">
+<meta property="og:image" content="http://ataurora.cn/2021/11/24/html/4.jpg">
+<meta property="og:image" content="http://ataurora.cn/2021/11/24/html/4.jpg">
+<meta property="article:published_time" content="2021-11-24T02:58:19.000Z">
+<meta property="article:modified_time" content="2021-11-24T03:03:31.447Z">
+<meta property="article:author" content="鸢尾">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ataurora.cn/2021/11/24/html/01.HTML%E9%9D%A2%E8%AF%95%E9%A2%98.png">
+
+<link rel="canonical" href="http://ataurora.cn/2021/11/24/html/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>HTML面试题 | Iris's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Iris's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ataurora.cn/2021/11/24/html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shimei.jpg">
+      <meta itemprop="name" content="鸢尾">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Iris's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTML面试题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-24 10:58:19 / 修改时间：11:03:31" itemprop="dateCreated datePublished" datetime="2021-11-24T10:58:19+08:00">2021-11-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">面试题</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>29k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>53 分钟</span>
+            </span>
+            <div class="post-description">备忘录，HTML总结</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h2><p><img src="/2021/11/24/html/01.HTML%E9%9D%A2%E8%AF%95%E9%A2%98.png" alt="01.HTML面试题"></p>
 <h2 id="1-src和href的区别"><a href="#1-src和href的区别" class="headerlink" title="1. src和href的区别"></a>1. src和href的区别</h2><p>src 和 href 都是<strong>用来引用外部的资源</strong>，它们的区别如下：</p>
 <ul>
 <li>  <strong>src：</strong> 表示对资源的引用，它指向的内容会嵌入到当前标签所在的位置。src会将其指向的资源下载并应⽤到⽂档内，如请求js脚本。当浏览器解析到该元素时，会暂停其他资源的下载和处理，直到将该资源加载、编译、执⾏完毕，所以⼀般js脚本会放在页面底部。常在 img、script、iframe 等元素上使用。</li>
@@ -108,7 +270,7 @@
 <li>  对开发者友好，使用语义类标签增强了可读性，结构更加清晰，开发者能清晰的看出网页的结构，便于团队的开发与维护。</li>
 </ul>
 <p>常见的语义化标签：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span><span class="tag">&lt;/<span class="name">header</span>&gt;</span>  头部</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">nav</span>&gt;</span><span class="tag">&lt;/<span class="name">nav</span>&gt;</span>  导航栏</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">section</span>&gt;</span><span class="tag">&lt;/<span class="name">section</span>&gt;</span>  区块（有语义化的div）</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span>&gt;</span><span class="tag">&lt;/<span class="name">main</span>&gt;</span>  主要区域</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">article</span>&gt;</span><span class="tag">&lt;/<span class="name">article</span>&gt;</span>  主要内容</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">aside</span>&gt;</span><span class="tag">&lt;/<span class="name">aside</span>&gt;</span>  侧边栏</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span><span class="tag">&lt;/<span class="name">footer</span>&gt;</span>  底部</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span><span class="tag">&lt;/<span class="name">header</span>&gt;</span>  头部</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">nav</span>&gt;</span><span class="tag">&lt;/<span class="name">nav</span>&gt;</span>  导航栏</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">section</span>&gt;</span><span class="tag">&lt;/<span class="name">section</span>&gt;</span>  区块（有语义化的div）</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span>&gt;</span><span class="tag">&lt;/<span class="name">main</span>&gt;</span>  主要区域</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">article</span>&gt;</span><span class="tag">&lt;/<span class="name">article</span>&gt;</span>  主要内容</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">aside</span>&gt;</span><span class="tag">&lt;/<span class="name">aside</span>&gt;</span>  侧边栏</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span><span class="tag">&lt;/<span class="name">footer</span>&gt;</span>  底部</span><br></pre></td></tr></table></figure>
 
 <p>写语义化代码应该注意什么：</p>
 <ul>
@@ -202,7 +364,7 @@
 <li>  nomodule：这个布尔属性被设置来标明这个脚本在支持 ES2015 modules 的浏览器中不执行。实际上，这可用于在不支持模块化 JavaScript 的旧浏览器中提供回退脚本。</li>
 <li>  language：废弃。最初用于表示代码块中的脚本语言。大多数浏览器都会忽略这个属性，不应该再使用它。</li>
 <li>  src：定义引用外部脚本的URI，这可以用来代替直接在文档中嵌入脚本。指定了 src 属性的script元素标签内不应该再有嵌入的脚本。</li>
-<li>  type：代替 language，表示代码块中脚本语言的内容类型（也称 MIME 类型：<strong><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></strong>）。支持的MIME类型包括text/javascript, text/ecmascript, application/javascript（非IE支持）, 和application/ecmascript（非IE支持）。如果没有定义这个属性，脚本会被视作JavaScript。如果MIME类型不是JavaScript类型（上述支持的类型），则该元素所包含的内容会被当作数据块而不会被浏览器执行。JS 文件中的MIME 类型通常是 “application/x-javascript” 。如果type属性为module，代码会被当作JavaScript模块 。</li>
+<li>  type：代替 language，表示代码块中脚本语言的内容类型（也称 MIME 类型：<strong><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></strong>）。支持的MIME类型包括text/javascript, text/ecmascript, application/javascript（非IE支持）, 和application/ecmascript（非IE支持）。如果没有定义这个属性，脚本会被视作JavaScript。如果MIME类型不是JavaScript类型（上述支持的类型），则该元素所包含的内容会被当作数据块而不会被浏览器执行。JS 文件中的MIME 类型通常是 “application/x-javascript” 。如果type属性为module，代码会被当作JavaScript模块 。</li>
 <li>  text：和 textContent 属性类似，本属性用于设置元素的文本内容。但和 textContent 不一样的是，本属性在节点插入到DOM之后，此属性被解析为可执行代码。</li>
 </ul>
 <h2 id="5-meta，常⽤的meta（元数据）标签有哪些"><a href="#5-meta，常⽤的meta（元数据）标签有哪些" class="headerlink" title="5. meta，常⽤的meta（元数据）标签有哪些"></a>5. meta，常⽤的meta（元数据）标签有哪些</h2><blockquote>
@@ -227,20 +389,20 @@
 </li>
 <li><p><code>http-equiv</code>：属性定义了一个编译指示指令。这个属性叫做 <code>http-equiv(alent)</code> 是因为所有允许的值都是特定HTTP头部的名称，如下：</p>
 <ul>
-<li><p><code>content-security-policy</code><br>  它允许页面作者定义当前页的<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">内容策略</a>。 内容策略主要指定允许的服务器源和脚本端点，这有助于防止跨站点脚本攻击。</p>
+<li><p><code>content-security-policy</code><br>  它允许页面作者定义当前页的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">内容策略</a>。 内容策略主要指定允许的服务器源和脚本端点，这有助于防止跨站点脚本攻击。</p>
 </li>
-<li><p><code>content-type</code><br>  如果使用这个属性，其值必须是”<code>text/html; charset=utf-8</code>“。注意：该属性只能用于 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types">MIME type</a> 为 <code>text/html</code> 的文档，不能用于MIME类型为XML的文档。</p>
+<li><p><code>content-type</code><br>  如果使用这个属性，其值必须是”<code>text/html; charset=utf-8</code>“。注意：该属性只能用于 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types">MIME type</a> 为 <code>text/html</code> 的文档，不能用于MIME类型为XML的文档。</p>
 </li>
 <li><p><code>default-style</code></p>
-<p>  设置默认 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS">CSS 样式表</a>组的名称。</p>
+<p>  设置默认 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS">CSS 样式表</a>组的名称。</p>
 </li>
 <li><p><code>x-ua-compatible</code><br>  如果指定，则 <code>content</code> 属性必须具有值 “<code>IE=edge</code>“。用户代理必须忽略此指示。</p>
 </li>
 <li><p><code>refresh</code></p>
 <p>  这个属性指定:</p>
 <ul>
-<li>  如果 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#attr-content"><code>content</code></a> 只包含一个正整数，则为重新载入页面的时间间隔(秒)；</li>
-<li>  如果 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#attr-content"><code>content</code></a> 包含一个正整数，并且后面跟着字符串 ‘<code>;url=</code>‘ 和一个合法的 URL，则是重定向到指定链接的时间间隔(秒)</li>
+<li>  如果 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#attr-content"><code>content</code></a> 只包含一个正整数，则为重新载入页面的时间间隔(秒)；</li>
+<li>  如果 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#attr-content"><code>content</code></a> 包含一个正整数，并且后面跟着字符串 ‘<code>;url=</code>‘ 和一个合法的 URL，则是重定向到指定链接的时间间隔(秒)</li>
 </ul>
 </li>
 </ul>
@@ -248,7 +410,7 @@
 <li><p><code>name</code></p>
 <ul>
 <li>  <code>name</code> 和 <code>content</code> 属性可以一起使用，以名-值对的方式给文档提供元数据，其中 name 作为元数据的名称，content 作为元数据的值。</li>
-<li>  在<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta/name">标准元数据名称</a>（见下方元数据名称）中查看 HTML 规范等规范中定义的标准元数据名称。</li>
+<li>  在<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta/name">标准元数据名称</a>（见下方元数据名称）中查看 HTML 规范等规范中定义的标准元数据名称。</li>
 </ul>
 </li>
 </ul>
@@ -261,15 +423,15 @@
 <p>常用的 <code>meta</code> 标签：</p>
 <ol>
 <li><p><code>charset</code>，用来描述 HTML 文档的编码类型：</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
 <li><p><code>keywords</code>，页面关键词：</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;关键词&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;关键词&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
 <li><p><code>description</code>，页面描述：</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;description&quot;</span> <span class="attr">content</span>=<span class="string">&quot;页面描述内容&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;description&quot;</span> <span class="attr">content</span>=<span class="string">&quot;页面描述内容&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
 <li><p><code>refresh</code>，页面重定向和刷新：</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;refresh&quot;</span> <span class="attr">content</span>=<span class="string">&quot;0;url=&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;refresh&quot;</span> <span class="attr">content</span>=<span class="string">&quot;0;url=&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
 <li><p><code>viewport</code>，适配移动端，可以控制视口的大小和比例：</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p> 其中，<code>content</code> 参数有以下几种：</p>
 <ul>
@@ -282,7 +444,7 @@
 </ul>
 </li>
 <li><p>搜索引擎索引方式：</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;robots&quot;</span> <span class="attr">content</span>=<span class="string">&quot;index,follow&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;robots&quot;</span> <span class="attr">content</span>=<span class="string">&quot;index,follow&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p> 其中，<code>content</code> 参数有以下几种：</p>
 <ul>
@@ -322,11 +484,11 @@
 </thead>
 <tbody><tr>
 <td align="left">no-referrer</td>
-<td align="left">不发送 HTTP <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer"><code>Referer</code></a> 请求头。</td>
+<td align="left">不发送 HTTP <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer"><code>Referer</code></a> 请求头。</td>
 </tr>
 <tr>
 <td align="left">origin</td>
-<td align="left">只发送当前文档的 <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Origin">origin</a>。</td>
+<td align="left">只发送当前文档的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Origin">origin</a>。</td>
 </tr>
 <tr>
 <td align="left">no-referrer-when-downgrade</td>
@@ -368,7 +530,7 @@
 <ul>
 <li><p><code>color-scheme</code>: 指定与当前文档兼容的一种或多种配色方案。</p>
 <p>  浏览器将优先采用此元数据的值，然后再使用用户的浏览器或设备设置，来确定页面上的各种默认颜色和元素外观，例如背景色、前景色、窗体控件和滚动条。<code>&lt;meta name=&quot;color-scheme&quot;&gt;</code> 的主要用途是指示当前页面与浅色模式和深色模式的兼容性，以及选用这两种模式时的优先顺序。</p>
-<p>  <code>color-scheme</code> 的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#attr-content"><code>content</code></a> 属性的值应当为以下值中的一个：</p>
+<p>  <code>color-scheme</code> 的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#attr-content"><code>content</code></a> 属性的值应当为以下值中的一个：</p>
 <ul>
 <li><p><code>normal</code></p>
 <p>  该文档未指定（unaware of）配色方案，应当仅使用默认配色进行渲染。</p>
@@ -385,7 +547,7 @@
 </li>
 <li><p>CSS 设备适配规范定义的元数据名称</p>
 <ul>
-<li><p><code>viewport</code>: 为<a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Viewport">viewport</a>（视口）的初始大小提供指示（hint）。目前仅用于移动设备。</p>
+<li><p><code>viewport</code>: 为<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Viewport">viewport</a>（视口）的初始大小提供指示（hint）。目前仅用于移动设备。</p>
 <ul>
 <li><p>  &lt;meta name=”viewport”&gt; 的 content 属性的值</p>
 </li>
@@ -430,7 +592,7 @@
 <tr>
 <td>viewport-fit</td>
 <td><code>auto</code>、<code>contain</code> 或者 <code>cover</code></td>
-<td>该<code>auto</code>值不影响初始布局视口，整个网页都是可见的。<br />该<code>contain</code>值表示视口被缩放以适应显示中内接的最大矩形。<br />该<code>cover</code>值意味着缩放视口以填充设备显示。强烈建议使用<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/env()">安全区域插入</a>变量来确保重要内容不会出现在显示之外。</td>
+<td>该<code>auto</code>值不影响初始布局视口，整个网页都是可见的。<br />该<code>contain</code>值表示视口被缩放以适应显示中内接的最大矩形。<br />该<code>cover</code>值意味着缩放视口以填充设备显示。强烈建议使用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/env()">安全区域插入</a>变量来确保重要内容不会出现在显示之外。</td>
 </tr>
 </tbody></table>
 </li>
@@ -440,7 +602,7 @@
 </li>
 <li><p>其它元数据名称</p>
 <ul>
-<li><p>  <code>creator</code>：当前文档的创建者，例如某个组织或者机构。如果有不止一个创建者，则应当使用多个名称为 <code>creator</code> 的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta">``</a> 元素。（而不是像关键词一样使用逗号分隔：关键词不应包含逗号，但创建者名称可能含有逗号。）</p>
+<li><p>  <code>creator</code>：当前文档的创建者，例如某个组织或者机构。如果有不止一个创建者，则应当使用多个名称为 <code>creator</code> 的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta">``</a> 元素。（而不是像关键词一样使用逗号分隔：关键词不应包含逗号，但创建者名称可能含有逗号。）</p>
 </li>
 <li><p>  <code>googlebot</code>：<code>robots</code> 的替代名称，只被 Googlebot（Google 的网页爬虫/索引搜寻器）使用。</p>
 </li>
@@ -481,32 +643,32 @@
 <tr>
 <td><code>all</code></td>
 <td>与 <code>index, follow</code> 等价</td>
-<td><a href="https://support.google.com/webmasters/answer/79812">谷歌</a></td>
+<td><a target="_blank" rel="noopener" href="https://support.google.com/webmasters/answer/79812">谷歌</a></td>
 </tr>
 <tr>
 <td><code>none</code></td>
 <td>与 <code>noindex, nofollow</code> 等价</td>
-<td><a href="https://support.google.com/webmasters/answer/79812">谷歌</a></td>
+<td><a target="_blank" rel="noopener" href="https://support.google.com/webmasters/answer/79812">谷歌</a></td>
 </tr>
 <tr>
 <td><code>noarchive</code></td>
 <td>要求搜索引擎不缓存页面内容。</td>
-<td><a href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives">谷歌</a>、<a href="https://help.yahoo.com/kb/search-for-desktop/SLN2213.html">雅虎</a>、<a href="https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240">Bing</a></td>
+<td><a target="_blank" rel="noopener" href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives">谷歌</a>、<a target="_blank" rel="noopener" href="https://help.yahoo.com/kb/search-for-desktop/SLN2213.html">雅虎</a>、<a target="_blank" rel="noopener" href="https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240">Bing</a></td>
 </tr>
 <tr>
 <td><code>nosnippet</code></td>
 <td>防止在搜索引擎结果中显示页面的任何描述。</td>
-<td><a href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives">谷歌</a>、<a href="https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240">Bing</a></td>
+<td><a target="_blank" rel="noopener" href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives">谷歌</a>、<a target="_blank" rel="noopener" href="https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240">Bing</a></td>
 </tr>
 <tr>
 <td><code>noimageindex</code></td>
 <td>要求此页面不显示为索引图像的引用页面。</td>
-<td><a href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives">谷歌</a></td>
+<td><a target="_blank" rel="noopener" href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives">谷歌</a></td>
 </tr>
 <tr>
 <td><code>nocache</code></td>
 <td><code>noarchive</code> 的替代名称。</td>
-<td><a href="https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240">Bing</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.bing.com/webmaster/help/which-robots-metatags-does-bing-support-5198d240">Bing</a></td>
 </tr>
 </tbody></table>
 </li>
@@ -517,9 +679,9 @@
 </ol>
 <h2 id="6-HTML5有哪些更新"><a href="#6-HTML5有哪些更新" class="headerlink" title="6. HTML5有哪些更新"></a>6. HTML5有哪些更新</h2><h4 id="1-新的-DOCTYPE-和字符集"><a href="#1-新的-DOCTYPE-和字符集" class="headerlink" title="1.新的 DOCTYPE 和字符集"></a>1.新的 DOCTYPE 和字符集</h4><ul>
 <li><p>HTML4</p>
-  <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">HTML</span> <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://www.w3.org/TR/html4/loose.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Type&quot;</span> <span class="attr">content</span>=<span class="string">&quot;text/html;charset=UTF-8&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">HTML</span> <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://www.w3.org/TR/html4/loose.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Type&quot;</span> <span class="attr">content</span>=<span class="string">&quot;text/html;charset=UTF-8&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
 <li><p>HTML5</p>
-  <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h4 id="2-语义化标签"><a href="#2-语义化标签" class="headerlink" title="2. 语义化标签"></a>2. 语义化标签</h4><table>
 <thead>
@@ -571,7 +733,7 @@
 </tbody></table>
 <h4 id="3-媒体标签"><a href="#3-媒体标签" class="headerlink" title="3. 媒体标签"></a>3. 媒体标签</h4><ol>
 <li><p>audio：在网页里嵌入音频内容</p>
-  <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">audio</span> <span class="attr">src</span>=<span class="string">&#x27;&#x27;</span> <span class="attr">controls</span> <span class="attr">autoplay</span> <span class="attr">loop</span>=<span class="string">&#x27;true&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">audio</span>&gt;</span></span><br></pre></td></tr></table></figure>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">audio</span> <span class="attr">src</span>=<span class="string">&#x27;&#x27;</span> <span class="attr">controls</span> <span class="attr">autoplay</span> <span class="attr">loop</span>=<span class="string">&#x27;true&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">audio</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <table>
 <thead>
@@ -607,7 +769,7 @@
 </tbody></table>
 </li>
 <li><p>video：在网页里嵌入视频内容</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">src</span>=<span class="string">&#x27;&#x27;</span> <span class="attr">poster</span>=<span class="string">&#x27;imgs/aa.jpg&#x27;</span> <span class="attr">controls</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">src</span>=<span class="string">&#x27;&#x27;</span> <span class="attr">poster</span>=<span class="string">&#x27;imgs/aa.jpg&#x27;</span> <span class="attr">controls</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <table>
 <thead>
@@ -680,9 +842,9 @@
 <td align="center">IE、Chrome、Safari</td>
 </tr>
 </tbody></table>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span>&gt;</span>    <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;images/s1.webm&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/webm&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">source</span>&gt;</span>    <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;images/s1.mp4&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">source</span>&gt;</span>    <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;images/s1.ogg&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/ogg&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">source</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span>&gt;</span>    <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;images/s1.webm&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/webm&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">source</span>&gt;</span>    <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;images/s1.mp4&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">source</span>&gt;</span>    <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;images/s1.ogg&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/ogg&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">source</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
 <li><p>track：提供了一套视频相关内容的实现机制。这些内容包括字幕、说明和章节标题。</p>
-<p> MDN：<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/track">https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/track</a></p>
+<p> MDN：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/track">https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/track</a></p>
 </li>
 </ol>
 <h4 id="4-表单"><a href="#4-表单" class="headerlink" title="4. 表单"></a>4. 表单</h4><p><strong>表单类型：</strong></p>
@@ -746,12 +908,12 @@
 <h4 id="8-其他"><a href="#8-其他" class="headerlink" title="8. 其他"></a>8. 其他</h4><ul>
 <li>  拖放：拖放是一种常见的特性，即抓取对象以后拖到另一个位置。设置元素可拖放：</li>
 </ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">draggable</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">draggable</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>  画布（canvas ）： canvas 元素使用 JavaScript 在网页上绘制图像。画布是一个矩形区域，可以控制其每一像素。canvas 拥有多种绘制路径、矩形、圆形、字符以及添加图像的方法。</li>
 </ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">&quot;myCanvas&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">&quot;myCanvas&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>  SVG：SVG 指可伸缩矢量图形，用于定义用于网络的基于矢量的图形，使用 XML 格式定义图形，图像在放大或改变尺寸的情况下其图形质量不会有损失，它是万维网联盟的标准</li>
@@ -763,7 +925,7 @@
 <li>  History API</li>
 </ul>
 <p><strong>总结(不全，还没改)：</strong> （1）新增语义化标签：nav、header、footer、aside、section、article （2）音频、视频标签：audio、video （3）数据存储：localStorage、sessionStorage （4）canvas（画布）、Geolocation（地理定位）、websocket（通信协议） （5）input标签新增属性：placeholder、autocomplete、autofocus、required （6）history API：go、forward、back、pushstate</p>
-<p><strong>移除的元素有(<a href="https://html.spec.whatwg.org/multipage/obsolete.html)%EF%BC%9A">https://html.spec.whatwg.org/multipage/obsolete.html)：</a></strong></p>
+<p><strong>移除的元素有(<a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/obsolete.html)%EF%BC%9A">https://html.spec.whatwg.org/multipage/obsolete.html)：</a></strong></p>
 <ul>
 <li>  纯表现的元素：basefont，big，center，font, s，strike，tt，u;</li>
 <li>  对可用性产生负面影响的元素：frame，frameset，noframes；</li>
@@ -776,14 +938,14 @@
 <p><strong>srcset：</strong></p>
 <ol>
 <li><p>格式一：图片源地址 空格 图片像素宽度[，图片源地址 空格 图片像素宽度，…]，如</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">srcset=&quot;1.jpg 580w, 2.png 618w&quot;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srcset=&quot;1.jpg 580w, 2.png 618w&quot;</span><br></pre></td></tr></table></figure>
 
 <p> 表示图片<code>1.jpg</code>的像素宽度为<code>580px</code>，图片<code>2.png</code>的像素宽度为<code>618px</code>，两个图片源之间用逗号隔开。</p>
 <p> <strong>千万注意：描述图片的像素宽度是用’w’单位，且一定要是图片的真实像素宽度，如果私自改动，那么会影响浏览器对图片的选择！</strong><del>这里的以 w 后缀的值并不是 “真实” 大小，它只是对浏览器的一个提示，大致等于图片的 “CSS像素” 大小。</del></p>
 <p> 其实上述例子类似给了个默认的<code>sizes</code>属性（具体下面再讲）</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">srcset=&quot;1.jpg 580w, 2.png 618w&quot; sizes=&quot;100vw&quot;</span><br></pre></td></tr></table></figure></li>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srcset=&quot;1.jpg 580w, 2.png 618w&quot; sizes=&quot;100vw&quot;</span><br></pre></td></tr></table></figure></li>
 <li><p>格式二：图片源地址 空格 屏幕像素密度[, 图片源地址 空格 屏幕像素密度, …]，如</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">srcset=&quot;1.jpg 1x, 2.png 2x&quot;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srcset=&quot;1.jpg 1x, 2.png 2x&quot;</span><br></pre></td></tr></table></figure>
 
 <p> 表示图片<code>1.jpg</code>为DPR（**DPR = 设备像素 / CSS像素(某一方向上)**）为1时下显示的图片；<code>2.png</code>为DPR为2时显示的图片，如果没有更大的DPR设置的图片源，那么当大于当前设置的DPR最高值时，会采用当前设置的最大DPR的图片源。如这里如果屏幕DPR为3，那么还是会用<code>2.png</code>。</p>
 </li>
@@ -825,7 +987,7 @@
 <li><p>如果<code>sizes</code>属性没有值，或者在有媒体条件下，其余条件宽度没有设值，那么默认是<code>100vw</code></p>
 <ul>
 <li><p>```html<br>  <img src="4.jpg" srcset="3.jpg 229w,2.png 618w"><!--等同于--><img src="4.jpg" srcset="3.jpg 229w,2.png 618w" sizes="100vw"></p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">-   ```html</span><br><span class="line">    &lt;img src=&quot;4.jpg&quot; srcset=&quot;3.jpg 229w,2.png 618w&quot;, sizes=&quot;(max-width: 500px) 400px&quot;&gt;&lt;!--等同于--&gt;&lt;img src=&quot;4.jpg&quot; srcset=&quot;3.jpg 229w,2.png 618w&quot;, sizes=&quot;(max-width: 500px) 400px, 100vw&quot;&gt;</span><br></pre></td></tr></table></figure></li>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-   ```html</span><br><span class="line">    &lt;img src=&quot;4.jpg&quot; srcset=&quot;3.jpg 229w,2.png 618w&quot;, sizes=&quot;(max-width: 500px) 400px&quot;&gt;&lt;!--等同于--&gt;&lt;img src=&quot;4.jpg&quot; srcset=&quot;3.jpg 229w,2.png 618w&quot;, sizes=&quot;(max-width: 500px) 400px, 100vw&quot;&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>  这种时候，就是直接根据屏幕的宽度来决定选取哪个图片源了。</p>
 </li>
 </ul>
@@ -855,17 +1017,17 @@
 <li> 创建 web worker 文件（js，回传函数等）</li>
 <li> 创建 web worker 对象</li>
 </ol>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span>  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span>  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Web Workers<span class="tag">&lt;/<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">head</span>&gt;</span><span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Worker<span class="tag">&lt;/<span class="name">h1</span>&gt;</span><span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;support&quot;</span>&gt;</span>not support<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;stopButton&quot;</span>&gt;</span>Stop Task<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;helloButton&quot;</span>&gt;</span>Post a Message<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">stopWorker</span>(<span class="params"></span>) </span>&#123;  worker.terminate()&#125;<span class="function"><span class="keyword">function</span> <span class="title">messageHandler</span>(<span class="params">e</span>) </span>&#123;  <span class="built_in">console</span>.log(e.data)&#125;<span class="function"><span class="keyword">function</span> <span class="title">errorHandler</span>(<span class="params">e</span>) </span>&#123;  <span class="built_in">console</span>.warn(e.message, e)&#125;<span class="function"><span class="keyword">function</span> <span class="title">loadDemo</span>(<span class="params"></span>) </span>&#123;  <span class="keyword">if</span> (<span class="keyword">typeof</span> (Worker) !== <span class="string">&#x27;undefined&#x27;</span>) &#123;    <span class="built_in">document</span>.getElementById(<span class="string">&quot;support&quot;</span>).innerHTML = <span class="string">&quot;support&quot;</span>    worker = <span class="keyword">new</span> Worker(<span class="string">&quot;echoWorker.js&quot;</span>)    worker.addEventListener(<span class="string">&quot;message&quot;</span>, messageHandler, <span class="literal">true</span>)    worker.addEventListener(<span class="string">&quot;error&quot;</span>, errorHandler, <span class="literal">true</span>)    <span class="built_in">document</span>.getElementById(<span class="string">&quot;helloButton&quot;</span>).onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;      worker.postMessage(<span class="string">&quot;for you&quot;</span>)    &#125;    <span class="built_in">document</span>.getElementById(<span class="string">&quot;stopButton&quot;</span>).onclick = stopWorker  &#125;&#125;<span class="built_in">window</span>.addEventListener(<span class="string">&quot;load&quot;</span>, loadDemo, <span class="literal">true</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span>  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span>  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Web Workers<span class="tag">&lt;/<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">head</span>&gt;</span><span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Worker<span class="tag">&lt;/<span class="name">h1</span>&gt;</span><span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;support&quot;</span>&gt;</span>not support<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;stopButton&quot;</span>&gt;</span>Stop Task<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;helloButton&quot;</span>&gt;</span>Post a Message<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">stopWorker</span>(<span class="params"></span>) </span>&#123;  worker.terminate()&#125;<span class="function"><span class="keyword">function</span> <span class="title">messageHandler</span>(<span class="params">e</span>) </span>&#123;  <span class="built_in">console</span>.log(e.data)&#125;<span class="function"><span class="keyword">function</span> <span class="title">errorHandler</span>(<span class="params">e</span>) </span>&#123;  <span class="built_in">console</span>.warn(e.message, e)&#125;<span class="function"><span class="keyword">function</span> <span class="title">loadDemo</span>(<span class="params"></span>) </span>&#123;  <span class="keyword">if</span> (<span class="keyword">typeof</span> (Worker) !== <span class="string">&#x27;undefined&#x27;</span>) &#123;    <span class="built_in">document</span>.getElementById(<span class="string">&quot;support&quot;</span>).innerHTML = <span class="string">&quot;support&quot;</span>    worker = <span class="keyword">new</span> Worker(<span class="string">&quot;echoWorker.js&quot;</span>)    worker.addEventListener(<span class="string">&quot;message&quot;</span>, messageHandler, <span class="literal">true</span>)    worker.addEventListener(<span class="string">&quot;error&quot;</span>, errorHandler, <span class="literal">true</span>)    <span class="built_in">document</span>.getElementById(<span class="string">&quot;helloButton&quot;</span>).onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;      worker.postMessage(<span class="string">&quot;for you&quot;</span>)    &#125;    <span class="built_in">document</span>.getElementById(<span class="string">&quot;stopButton&quot;</span>).onclick = stopWorker  &#125;&#125;<span class="built_in">window</span>.addEventListener(<span class="string">&quot;load&quot;</span>, loadDemo, <span class="literal">true</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">messageHandler</span>(<span class="params">e</span>) </span>&#123;  postMessage(<span class="string">&quot;say: &quot;</span> + e.data)&#125;addEventListener(<span class="string">&quot;message&quot;</span>, messageHandler, <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">messageHandler</span>(<span class="params">e</span>) </span>&#123;  postMessage(<span class="string">&quot;say: &quot;</span> + e.data)&#125;addEventListener(<span class="string">&quot;message&quot;</span>, messageHandler, <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
 
 <h2 id="10-HTML5的离线缓存怎么使用，它的工作原理是什么"><a href="#10-HTML5的离线缓存怎么使用，它的工作原理是什么" class="headerlink" title="10. HTML5的离线缓存怎么使用，它的工作原理是什么"></a>10. HTML5的离线缓存怎么使用，它的工作原理是什么</h2><p>离线存储指的是：在用户没有与因特网连接时，可以正常访问站点或应用，在用户与因特网连接时，更新用户机器上的缓存文件。</p>
 <p><strong>原理：</strong>HTML5的离线存储是基于一个新建的 <code>.appcache</code> 文件的缓存机制(不是存储技术)，通过这个文件上的解析清单离线存储资源，这些资源就会像cookie一样被存储了下来。之后当网络在处于离线状态下时，浏览器会通过被离线存储的数据进行页面展示</p>
 <p><strong>使用方法：</strong> （1）创建一个和 html 同名的 manifest 文件，然后在页面头部加入 manifest 属性：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span> <span class="attr">manifest</span>=<span class="string">&quot;index.manifest&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span> <span class="attr">manifest</span>=<span class="string">&quot;index.manifest&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>（2）在 <code>cache.manifest</code> 文件中编写需要离线存储的资源：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">CACHE MANIFEST    #v0.11    CACHE:    js/app.js    css/style.css    NETWORK:    resourse/logo.png    FALLBACK:    / /offline.html</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CACHE MANIFEST    #v0.11    CACHE:    js/app.js    css/style.css    NETWORK:    resourse/logo.png    FALLBACK:    / /offline.html</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>  <strong>CACHE</strong>: 表示需要离线存储的资源列表，由于包含 manifest 文件的页面将被自动离线存储，所以不需要把页面自身也列出来。</li>
@@ -951,23 +1113,23 @@
 </thead>
 <tbody><tr>
 <td align="left">allow</td>
-<td align="left">用于为<code>&lt;iframe&gt;</code>指定其<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Feature_Policy">特征策略</a>.</td>
+<td align="left">用于为<code>&lt;iframe&gt;</code>指定其<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Feature_Policy">特征策略</a>.</td>
 </tr>
 <tr>
 <td align="left">allowfullscreen</td>
-<td align="left">设置为<code>true</code>时，可以通过调用 <code>&lt;iframe&gt;</code> 的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/requestFullScreen"><code>requestFullscreen()</code></a> 方法激活全屏模式。<br />这是一个历史遗留属性，已经被重新定义为 <code>allow=&quot;fullscreen&quot;</code>。</td>
+<td align="left">设置为<code>true</code>时，可以通过调用 <code>&lt;iframe&gt;</code> 的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/requestFullScreen"><code>requestFullscreen()</code></a> 方法激活全屏模式。<br />这是一个历史遗留属性，已经被重新定义为 <code>allow=&quot;fullscreen&quot;</code>。</td>
 </tr>
 <tr>
 <td align="left">allowpaymentrequest</td>
-<td align="left">设置为<code>true</code>时，跨域的 <code>&lt;iframe&gt;</code> 就可以调用 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Payment_Request_API">Payment Request API</a>。<br />这是一个历史遗留属性，已经被重新定义为 <code>allow=&quot;payment&quot;</code>.</td>
+<td align="left">设置为<code>true</code>时，跨域的 <code>&lt;iframe&gt;</code> 就可以调用 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Payment_Request_API">Payment Request API</a>。<br />这是一个历史遗留属性，已经被重新定义为 <code>allow=&quot;payment&quot;</code>.</td>
 </tr>
 <tr>
 <td align="left">csp</td>
-<td align="left">对嵌入的资源配置<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP">内容安全策略</a>。</td>
+<td align="left">对嵌入的资源配置<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP">内容安全策略</a>。</td>
 </tr>
 <tr>
 <td align="left">height</td>
-<td align="left">以CSS像素格式<a href="https://developer.mozilla.org/zh-CN/docs/HTML/HTML5">HTML5</a>，或像素格式HTML 4.01，或百分比格式指定frame的高度。默认值为<code>150</code>。</td>
+<td align="left">以CSS像素格式<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/HTML/HTML5">HTML5</a>，或像素格式HTML 4.01，或百分比格式指定frame的高度。默认值为<code>150</code>。</td>
 </tr>
 <tr>
 <td align="left">importance</td>
@@ -979,15 +1141,15 @@
 </tr>
 <tr>
 <td align="left">referrerpolicy</td>
-<td align="left">表示在获取 iframe 资源时如何发送 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/referrer">referrer</a> 首部：<br /><code>no-referrer</code>: 不发送 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer"><code>Referer</code></a> 首部。<br /><code>no-referrer-when-downgrade</code> (default): 向不受 <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/TLS">TLS</a> (<a href="https://developer.mozilla.org/zh-CN/docs/Glossary/https">HTTPS</a>) 保护的 <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Origin">origin</a> 发送请求时，不发送 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer"><code>Referer</code></a> 首部。<br /><code>origin</code>: referrer 首部中仅包含来源页面的源。换言之，仅包含来源页面的 <a href="https://developer.mozilla.org/en-US/docs/Archive/Mozilla/URIScheme">scheme</a>, <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Host">host</a>, 以及 <a href="https://developer.mozilla.org/en-US/docs/Glossary/Port">port (en-US)</a>。<br /><code>origin-when-cross-origin</code>: 发起跨域请求时，仅在 referrer 中包含来源页面的源。发起同源请求时，仍然会在 referrer 中包含来源页面在服务器上的路径信息。<br /><code>same-origin</code>: 对于 <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Same-origin_policy">same origin</a> （同源）请求，发送 referrer 首部，否则不发送。<br /><code>strict-origin</code>: 仅当被请求页面和来源页面具有相同的协议安全等级时才发送 referrer 首部（比如从采用 HTTPS 协议的页面请求另一个采用 HTTPS 协议的页面）。如果被请求页面的协议安全等级较低，则不会发送 referrer 首部（比如从采用 HTTPS 协议的页面请求采用 HTTP 协议的页面）。<br /><code>strict-origin-when-cross-origin</code>: 当发起同源请求时，在 referrer 首部中包含完整的 URL。当被请求页面与来源页面不同源但是有相同协议安全等级时（比如 HTTPS→HTTPS），在 referrer 首部中仅包含来源页面的源。当被请求页面的协议安全等级较低时（比如 HTTPS→HTTP），不发送 referrer 首部。<br /><code>unsafe-url</code>: 始终在 referrer 首部中包含源以及路径 （但不包括 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/hash">fragment</a>，<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/password">密码</a>，或<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/username">用户名</a>）。<strong>这个值是不安全的</strong>, 因为这样做会暴露受 TLS 保护的资源的源和路径信息。</td>
+<td align="left">表示在获取 iframe 资源时如何发送 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Document/referrer">referrer</a> 首部：<br /><code>no-referrer</code>: 不发送 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer"><code>Referer</code></a> 首部。<br /><code>no-referrer-when-downgrade</code> (default): 向不受 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/TLS">TLS</a> (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/https">HTTPS</a>) 保护的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Origin">origin</a> 发送请求时，不发送 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer"><code>Referer</code></a> 首部。<br /><code>origin</code>: referrer 首部中仅包含来源页面的源。换言之，仅包含来源页面的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Archive/Mozilla/URIScheme">scheme</a>, <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Host">host</a>, 以及 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/Port">port (en-US)</a>。<br /><code>origin-when-cross-origin</code>: 发起跨域请求时，仅在 referrer 中包含来源页面的源。发起同源请求时，仍然会在 referrer 中包含来源页面在服务器上的路径信息。<br /><code>same-origin</code>: 对于 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Same-origin_policy">same origin</a> （同源）请求，发送 referrer 首部，否则不发送。<br /><code>strict-origin</code>: 仅当被请求页面和来源页面具有相同的协议安全等级时才发送 referrer 首部（比如从采用 HTTPS 协议的页面请求另一个采用 HTTPS 协议的页面）。如果被请求页面的协议安全等级较低，则不会发送 referrer 首部（比如从采用 HTTPS 协议的页面请求采用 HTTP 协议的页面）。<br /><code>strict-origin-when-cross-origin</code>: 当发起同源请求时，在 referrer 首部中包含完整的 URL。当被请求页面与来源页面不同源但是有相同协议安全等级时（比如 HTTPS→HTTPS），在 referrer 首部中仅包含来源页面的源。当被请求页面的协议安全等级较低时（比如 HTTPS→HTTP），不发送 referrer 首部。<br /><code>unsafe-url</code>: 始终在 referrer 首部中包含源以及路径 （但不包括 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/hash">fragment</a>，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/password">密码</a>，或<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/username">用户名</a>）。<strong>这个值是不安全的</strong>, 因为这样做会暴露受 TLS 保护的资源的源和路径信息。</td>
 </tr>
 <tr>
 <td align="left">sandbox</td>
-<td align="left">该属性对呈现在 iframe 框架中的内容启用一些额外的限制条件。属性值可以为空字符串（这种情况下会启用所有限制），也可以是用空格分隔的一系列指定的字符串。有效的值有：<br /> <code>allow-downloads-without-user-activation</code> : 允许在没有征求用户同意的情况下下载文件.<br /> <code>allow-forms</code>: 允许嵌入的浏览上下文提交表单。如果没有使用该关键字，则无法提交表单。<br /> <code>allow-modals</code>: 允许嵌入的浏览上下文打开模态窗口。 <br /><code>allow-orientation-lock</code>: 允许嵌入的浏览上下文锁定屏幕方向（译者注：比如智能手机、平板电脑的水平朝向或垂直朝向）。<br /> <code>allow-pointer-lock</code>: 允许嵌入的浏览上下文使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Pointer_Lock_API">Pointer Lock API</a>.<br /> <code>allow-popups</code>: 允许弹窗 (例如 window.open, target=”_blank”, <code>showModalDialog</code>)。如果没有使用该关键字，相应的功能将自动被禁用。 <br /><code>allow-popups-to-escape-sandbox</code>:  允许沙箱化的文档打开新窗口，并且新窗口不会继承沙箱标记。例如，安全地沙箱化一个广告页面，而不会在广告链接到的新页面中启用相同的限制条件。<br /> <code>allow-presentation</code>: 允许嵌入的浏览上下文开始一个<a href="https://developer.mozilla.org/en-US/docs/Web/API/PresentationRequest"> presentation session</a>。 <br /><code>allow-same-origin</code>: 如果没有使用该关键字，嵌入的浏览上下文将被视为来自一个独立的源，这将使 <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Same-origin_policy">same-origin policy</a> 同源检查失败。<br /> <code>allow-scripts</code>: 允许嵌入的浏览上下文运行脚本（但不能创建弹窗）。如果没有使用该关键字，就无法运行脚本。 <br /><code>allow-storage-access-by-user-activation</code> : 允许嵌入的浏览上下文通过 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Storage_Access_API">Storage Access API</a> 使用父级浏览上下文的存储功能。<br /> <code>allow-top-navigation</code>: 允许嵌入的浏览上下文导航（加载）内容到顶级的浏览上下文。<br /> <code>allow-top-navigation-by-user-activation</code>: 允许嵌入的浏览上下文<strong>在经过用户允许后</strong>导航（加载）内容到顶级的浏览上下文。</td>
+<td align="left">该属性对呈现在 iframe 框架中的内容启用一些额外的限制条件。属性值可以为空字符串（这种情况下会启用所有限制），也可以是用空格分隔的一系列指定的字符串。有效的值有：<br /> <code>allow-downloads-without-user-activation</code> : 允许在没有征求用户同意的情况下下载文件.<br /> <code>allow-forms</code>: 允许嵌入的浏览上下文提交表单。如果没有使用该关键字，则无法提交表单。<br /> <code>allow-modals</code>: 允许嵌入的浏览上下文打开模态窗口。 <br /><code>allow-orientation-lock</code>: 允许嵌入的浏览上下文锁定屏幕方向（译者注：比如智能手机、平板电脑的水平朝向或垂直朝向）。<br /> <code>allow-pointer-lock</code>: 允许嵌入的浏览上下文使用 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Pointer_Lock_API">Pointer Lock API</a>.<br /> <code>allow-popups</code>: 允许弹窗 (例如 window.open, target=”_blank”, <code>showModalDialog</code>)。如果没有使用该关键字，相应的功能将自动被禁用。 <br /><code>allow-popups-to-escape-sandbox</code>:  允许沙箱化的文档打开新窗口，并且新窗口不会继承沙箱标记。例如，安全地沙箱化一个广告页面，而不会在广告链接到的新页面中启用相同的限制条件。<br /> <code>allow-presentation</code>: 允许嵌入的浏览上下文开始一个<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/PresentationRequest"> presentation session</a>。 <br /><code>allow-same-origin</code>: 如果没有使用该关键字，嵌入的浏览上下文将被视为来自一个独立的源，这将使 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Same-origin_policy">same-origin policy</a> 同源检查失败。<br /> <code>allow-scripts</code>: 允许嵌入的浏览上下文运行脚本（但不能创建弹窗）。如果没有使用该关键字，就无法运行脚本。 <br /><code>allow-storage-access-by-user-activation</code> : 允许嵌入的浏览上下文通过 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Storage_Access_API">Storage Access API</a> 使用父级浏览上下文的存储功能。<br /> <code>allow-top-navigation</code>: 允许嵌入的浏览上下文导航（加载）内容到顶级的浏览上下文。<br /> <code>allow-top-navigation-by-user-activation</code>: 允许嵌入的浏览上下文<strong>在经过用户允许后</strong>导航（加载）内容到顶级的浏览上下文。</td>
 </tr>
 <tr>
 <td align="left">src</td>
-<td align="left">被嵌套的页面的 URL 地址。使用 <code>about:blank</code> 值可以嵌入一个遵从<a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy">同源策略</a>的空白页。在 Firefox （version 65及更高版本）、基于 Chromium 的浏览器、Safari/iOS 中使用代码移除 <code>iframe</code> 的 <code>src</code> 属性（例如通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/removeAttribute"><code>Element.removeAttribute()</code></a> ）会导致 <code>about:blank</code> 被载入 frame。</td>
+<td align="left">被嵌套的页面的 URL 地址。使用 <code>about:blank</code> 值可以嵌入一个遵从<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy">同源策略</a>的空白页。在 Firefox （version 65及更高版本）、基于 Chromium 的浏览器、Safari/iOS 中使用代码移除 <code>iframe</code> 的 <code>src</code> 属性（例如通过 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/removeAttribute"><code>Element.removeAttribute()</code></a> ）会导致 <code>about:blank</code> 被载入 frame。</td>
 </tr>
 <tr>
 <td align="left">srcdoc</td>
@@ -995,7 +1157,7 @@
 </tr>
 <tr>
 <td align="left">width</td>
-<td align="left">以CSS像素格式<a href="https://developer.mozilla.org/zh-CN/docs/HTML/HTML5">HTML5</a>，或以像素格式HTML 4.01，或以百分比格式指定的 frame 的宽度。默认值是<code>300</code>。</td>
+<td align="left">以CSS像素格式<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/HTML/HTML5">HTML5</a>，或以像素格式HTML 4.01，或以百分比格式指定的 frame 的宽度。默认值是<code>300</code>。</td>
 </tr>
 </tbody></table>
 <p><strong>优点：</strong></p>
@@ -1017,12 +1179,12 @@
 <ul>
 <li>  使用方法1：</li>
 </ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;mobile&quot;</span>&gt;</span>Number:<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;mobile&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;mobile&quot;</span>&gt;</span>Number:<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;mobile&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>  使用方法2：</li>
 </ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span>&gt;</span>Date:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span>&gt;</span>Date:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="15-Canvas和SVG的区别"><a href="#15-Canvas和SVG的区别" class="headerlink" title="15. Canvas和SVG的区别"></a>15. Canvas和SVG的区别</h2><p><strong>（1）SVG：</strong> SVG可缩放矢量图形（Scalable Vector Graphics）是基于可扩展标记语言XML描述的2D图形的语言，SVG基于XML就意味着SVG DOM中的每个元素都是可用的，可以为某个元素附加Javascript事件处理器。在 SVG 中，每个被绘制的图形均被视为对象。如果 SVG 对象的属性发生变化，那么浏览器能够自动重现图形。</p>
 <p>其特点如下：</p>
@@ -1099,7 +1261,7 @@
 </ul>
 <p>总之，<strong>严格模式让各个浏览器统一执行一套规范，兼容模式保证了旧网站的正常运行。</strong></p>
 <p>在怪异模式下，盒模型为IE模型 ；严格模式下为W3C标准的盒模型</p>
-<p>参考：<a href="https://juejin.cn/post/6989264337143595044%EF%BC%9Bhttps://juejin.cn/post/6969072081308745764">https://juejin.cn/post/6989264337143595044；https://juejin.cn/post/6969072081308745764</a></p>
+<p>参考：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6989264337143595044%EF%BC%9Bhttps://juejin.cn/post/6969072081308745764">https://juejin.cn/post/6989264337143595044；https://juejin.cn/post/6969072081308745764</a></p>
 <h2 id="18-浏览器乱码的原因是什么？如何解决？"><a href="#18-浏览器乱码的原因是什么？如何解决？" class="headerlink" title="18. 浏览器乱码的原因是什么？如何解决？"></a>18. 浏览器乱码的原因是什么？如何解决？</h2><p><strong>产生乱码的原因：</strong></p>
 <ul>
 <li>  网页源代码是<code>gbk</code>的编码，而内容中的中文字是<code>utf-8</code>编码的，这样浏览器打开即会出现<code>html</code>乱码，反之也会出现乱码；</li>
@@ -1121,7 +1283,7 @@
 </ul>
 <p>“优雅降级”观点认为应该针对那些最高级、最完善的浏览器来设计网站。而将那些被认为“过时”或有功能缺失的浏览器下的测试工作安排在开发周期的最后阶段，并把测试对象限定为主流浏览器（如 IE、Mozilla 等）的前一个版本。 在这种设计范例下，旧版的浏览器被认为仅能提供“简陋却无妨 (poor, but passable)” 的浏览体验。可以做一些小的调整来适应某个特定的浏览器。但由于它们并非我们所关注的焦点，因此除了修复较大的错误之外，其它的差异将被直接忽略。</p>
 <p>“渐进增强”观点则认为应关注于内容本身。内容是建立网站的诱因，有的网站展示它，有的则收集它，有的寻求，有的操作，还有的网站甚至会包含以上的种种，但相同点是它们全都涉及到内容。这使得“渐进增强”成为一种更为合理的设计范例。这也是它立即被 Yahoo 所采纳并用以构建其“分级式浏览器支持 (Graded Browser Support)”策略的原因所在。</p>
-<h2 id="20-说一下-HTML5-drag-API"><a href="#20-说一下-HTML5-drag-API" class="headerlink" title="20. 说一下 HTML5 drag API"></a>20. 说一下 HTML5 drag API</h2><p>参考：<a href="https://juejin.cn/post/7014414669221724190">https://juejin.cn/post/7014414669221724190</a></p>
+<h2 id="20-说一下-HTML5-drag-API"><a href="#20-说一下-HTML5-drag-API" class="headerlink" title="20. 说一下 HTML5 drag API"></a>20. 说一下 HTML5 drag API</h2><p>参考：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7014414669221724190">https://juejin.cn/post/7014414669221724190</a></p>
 <p><strong>draggable</strong></p>
 <ul>
 <li>  当我们想让元素变成可拖拽时，我们就需要设置 draggable 属性。</li>
@@ -1188,19 +1350,253 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">HTML</span>&gt;</span><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span>  <span class="tag">&lt;<span class="name">title</span>&gt;</span>拖放示例-文本<span class="tag">&lt;/<span class="name">title</span>&gt;</span>  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css">    <span class="selector-id">#drop-area</span> &#123;        <span class="attribute">width</span>: <span class="number">100px</span>;        <span class="attribute">height</span>: <span class="number">100px</span>;        <span class="attribute">background-color</span>: <span class="number">#660000</span>;    &#125;    <span class="selector-id">#drag-el</span> &#123;        <span class="attribute">width</span>: <span class="number">100px</span>;        <span class="attribute">height</span>: <span class="number">100px</span>;        <span class="attribute">background-color</span>: palegoldenrod;    &#125;  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span><span class="tag">&lt;/<span class="name">head</span>&gt;</span><span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;drop-area&quot;</span>&gt;</span>423423423<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;drag-el&quot;</span> <span class="attr">draggable</span>=<span class="string">&quot;true&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">  <span class="built_in">window</span>.onload = <span class="function">() =&gt;</span> &#123;    <span class="keyword">const</span> dragEl = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#drag-el&#x27;</span>)    <span class="keyword">const</span> dropArea = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#drop-area&#x27;</span>)    dragEl.addEventListener(<span class="string">&#x27;dragstart&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;      event.dataTransfer.setData(<span class="string">&#x27;text/plain&#x27;</span>, event.target.id)    &#125;)    dropArea.addEventListener(<span class="string">&#x27;dragover&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;        <span class="comment">// 通知浏览器不要执行事件的常规内置操作      event.preventDefault()    &#125;)    dropArea.addEventListener(&#x27;drop&#x27;, (event) =&gt; &#123;      const id = event.dataTransfer.getData(&#x27;text/plain&#x27;)      dropArea.appendChild(document.getElementById(id))    &#125;)  &#125;</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">HTML</span>&gt;</span><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span>  <span class="tag">&lt;<span class="name">title</span>&gt;</span>拖放示例-文本<span class="tag">&lt;/<span class="name">title</span>&gt;</span>  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css">    <span class="selector-id">#drop-area</span> &#123;        <span class="attribute">width</span>: <span class="number">100px</span>;        <span class="attribute">height</span>: <span class="number">100px</span>;        <span class="attribute">background-color</span>: <span class="number">#660000</span>;    &#125;    <span class="selector-id">#drag-el</span> &#123;        <span class="attribute">width</span>: <span class="number">100px</span>;        <span class="attribute">height</span>: <span class="number">100px</span>;        <span class="attribute">background-color</span>: palegoldenrod;    &#125;  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span><span class="tag">&lt;/<span class="name">head</span>&gt;</span><span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;drop-area&quot;</span>&gt;</span>423423423<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;drag-el&quot;</span> <span class="attr">draggable</span>=<span class="string">&quot;true&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">  <span class="built_in">window</span>.onload = <span class="function">() =&gt;</span> &#123;    <span class="keyword">const</span> dragEl = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#drag-el&#x27;</span>)    <span class="keyword">const</span> dropArea = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#drop-area&#x27;</span>)    dragEl.addEventListener(<span class="string">&#x27;dragstart&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;      event.dataTransfer.setData(<span class="string">&#x27;text/plain&#x27;</span>, event.target.id)    &#125;)    dropArea.addEventListener(<span class="string">&#x27;dragover&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;        <span class="comment">// 通知浏览器不要执行事件的常规内置操作      event.preventDefault()    &#125;)    dropArea.addEventListener(&#x27;drop&#x27;, (event) =&gt; &#123;      const id = event.dataTransfer.getData(&#x27;text/plain&#x27;)      dropArea.appendChild(document.getElementById(id))    &#125;)  &#125;</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 
 
 
 
 <h2 id="21-为什么-script-标签放在-body-最后，css-放在-head-里面"><a href="#21-为什么-script-标签放在-body-最后，css-放在-head-里面" class="headerlink" title="21. 为什么 script 标签放在 body 最后，css 放在 head 里面"></a>21. 为什么 script 标签放在 body 最后，css 放在 head 里面</h2><h2 id="22-导入-css-的方式，为什么建议用-link-而不是-import（见02-CSS）"><a href="#22-导入-css-的方式，为什么建议用-link-而不是-import（见02-CSS）" class="headerlink" title="22. 导入 css 的方式，为什么建议用 link 而不是 @import（见02.CSS）"></a>22. 导入 css 的方式，为什么建议用 link 而不是 @import（见02.CSS）</h2><p>import会增加http请求（进而影响加载速度）</p>
-<h2 id="23-HTML-的全局属性"><a href="#23-HTML-的全局属性" class="headerlink" title="23. HTML 的全局属性"></a>23. HTML 的全局属性</h2><h2 id="24-Geolocation-API（地理定位）用于定位用户的位置。"><a href="#24-Geolocation-API（地理定位）用于定位用户的位置。" class="headerlink" title="24. Geolocation API（地理定位）用于定位用户的位置。"></a>24. Geolocation API（地理定位）用于定位用户的位置。</h2><h2 id="25-WebSockets"><a href="#25-WebSockets" class="headerlink" title="25. WebSockets"></a>25. WebSockets</h2><h2 id="26-Communication-API"><a href="#26-Communication-API" class="headerlink" title="26. Communication API"></a>26. Communication API</h2><h2 id="27-lt-img-gt-title-和-alt-的区别"><a href="#27-lt-img-gt-title-和-alt-的区别" class="headerlink" title="27. &lt;img&gt; title 和 alt 的区别"></a>27. &lt;img&gt; title 和 alt 的区别</h2>]]></content>
-      <categories>
-        <category>面试题</category>
-      </categories>
-      <tags>
-        <tag>面试</tag>
-      </tags>
-  </entry>
-</search>
+<h2 id="23-HTML-的全局属性"><a href="#23-HTML-的全局属性" class="headerlink" title="23. HTML 的全局属性"></a>23. HTML 的全局属性</h2><h2 id="24-Geolocation-API（地理定位）用于定位用户的位置。"><a href="#24-Geolocation-API（地理定位）用于定位用户的位置。" class="headerlink" title="24. Geolocation API（地理定位）用于定位用户的位置。"></a>24. Geolocation API（地理定位）用于定位用户的位置。</h2><h2 id="25-WebSockets"><a href="#25-WebSockets" class="headerlink" title="25. WebSockets"></a>25. WebSockets</h2><h2 id="26-Communication-API"><a href="#26-Communication-API" class="headerlink" title="26. Communication API"></a>26. Communication API</h2><h2 id="27-lt-img-gt-title-和-alt-的区别"><a href="#27-lt-img-gt-title-和-alt-的区别" class="headerlink" title="27. &lt;img&gt; title 和 alt 的区别"></a>27. &lt;img&gt; title 和 alt 的区别</h2>
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>鸢尾
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ataurora.cn/2021/11/24/html/" title="HTML面试题">http://ataurora.cn/2021/11/24/html/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 面试</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/22/null/" rel="next" title="CSS选择器">
+      CSS选择器 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-text">思维导图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-src%E5%92%8Chref%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1. src和href的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AF%B9HTML%E8%AF%AD%E4%B9%89%E5%8C%96%E7%9A%84%E7%90%86%E8%A7%A3%EF%BC%8CSEO%E4%BC%98%E5%8C%96"><span class="nav-text">2. 对HTML语义化的理解，SEO优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-DOCTYPE-%E2%BD%82%E6%A1%A3%E7%B1%BB%E5%9E%8B-%E7%9A%84%E4%BD%9C%E2%BD%A4"><span class="nav-text">3. DOCTYPE(⽂档类型) 的作⽤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-script%E6%A0%87%E7%AD%BE%E4%B8%ADdefer%E5%92%8Casync%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%8C%E8%BF%98%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B1%9E%E6%80%A7%EF%BC%9F"><span class="nav-text">4. script标签中defer和async的区别，还有哪些属性？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-meta%EF%BC%8C%E5%B8%B8%E2%BD%A4%E7%9A%84meta%EF%BC%88%E5%85%83%E6%95%B0%E6%8D%AE%EF%BC%89%E6%A0%87%E7%AD%BE%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-text">5. meta，常⽤的meta（元数据）标签有哪些</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-HTML5%E6%9C%89%E5%93%AA%E4%BA%9B%E6%9B%B4%E6%96%B0"><span class="nav-text">6. HTML5有哪些更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%96%B0%E7%9A%84-DOCTYPE-%E5%92%8C%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-text">1.新的 DOCTYPE 和字符集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%AF%AD%E4%B9%89%E5%8C%96%E6%A0%87%E7%AD%BE"><span class="nav-text">2. 语义化标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%AA%92%E4%BD%93%E6%A0%87%E7%AD%BE"><span class="nav-text">3. 媒体标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E8%A1%A8%E5%8D%95"><span class="nav-text">4. 表单</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E8%BF%9B%E5%BA%A6%E6%9D%A1%E3%80%81%E5%BA%A6%E9%87%8F%E5%99%A8"><span class="nav-text">5. 进度条、度量器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-DOM%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C"><span class="nav-text">6.DOM查询操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-Web%E5%AD%98%E5%82%A8"><span class="nav-text">7. Web存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-%E5%85%B6%E4%BB%96"><span class="nav-text">8. 其他</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-img%E7%9A%84srcset%E5%B1%9E%E6%80%A7%E7%9A%84%E4%BD%9C%E2%BD%A4%EF%BC%9F"><span class="nav-text">7. img的srcset属性的作⽤？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F-%E7%A9%BA-void-%E5%85%83%E7%B4%A0%E6%9C%89%E9%82%A3%E4%BA%9B%EF%BC%9F"><span class="nav-text">8. 行内元素有哪些？块级元素有哪些？ 空(void)元素有那些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E8%AF%B4%E4%B8%80%E4%B8%8B-web-worker"><span class="nav-text">9. 说一下 web worker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-HTML5%E7%9A%84%E7%A6%BB%E7%BA%BF%E7%BC%93%E5%AD%98%E6%80%8E%E4%B9%88%E4%BD%BF%E7%94%A8%EF%BC%8C%E5%AE%83%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">10. HTML5的离线缓存怎么使用，它的工作原理是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E5%AF%B9-HTML5-%E7%9A%84%E7%A6%BB%E7%BA%BF%E5%82%A8%E5%AD%98%E8%B5%84%E6%BA%90%E8%BF%9B%E8%A1%8C%E7%AE%A1%E7%90%86%E5%92%8C%E5%8A%A0%E8%BD%BD%EF%BC%9F"><span class="nav-text">11. 浏览器是如何对 HTML5 的离线储存资源进行管理和加载？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-title%E4%B8%8Eh1%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81b%E4%B8%8Estrong%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81i%E4%B8%8Eem%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-text">12. title与h1的区别、b与strong的区别、i与em的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-iframe-%E6%9C%89%E9%82%A3%E4%BA%9B%E4%BC%98%E7%82%B9%E5%92%8C%E7%BC%BA%E7%82%B9%EF%BC%9F"><span class="nav-text">13. iframe 有那些优点和缺点？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-label-%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%EF%BC%9F"><span class="nav-text">14. label 的作用是什么？如何使用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-Canvas%E5%92%8CSVG%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">15. Canvas和SVG的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-head-%E6%A0%87%E7%AD%BE%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%8C%E5%85%B6%E4%B8%AD%E4%BB%80%E4%B9%88%E6%A0%87%E7%AD%BE%E5%BF%85%E4%B8%8D%E5%8F%AF%E5%B0%91%EF%BC%9F"><span class="nav-text">16. head 标签有什么作用，其中什么标签必不可少？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-%E6%96%87%E6%A1%A3%E5%A3%B0%E6%98%8E%EF%BC%88Doctype%EF%BC%89%E5%92%8C-lt-Doctype-html-gt-%E6%9C%89%E4%BD%95%E4%BD%9C%E7%94%A8-%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E4%B8%8E%E6%B7%B7%E6%9D%82%E6%A8%A1%E5%BC%8F%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%EF%BC%9F%E5%AE%83%E4%BB%AC%E6%9C%89%E4%BD%95%E6%84%8F%E4%B9%89"><span class="nav-text">17. 文档声明（Doctype）和&lt;!Doctype html&gt;有何作用? 严格模式与混杂模式如何区分？它们有何意义?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#18-%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B9%B1%E7%A0%81%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%EF%BC%9F"><span class="nav-text">18. 浏览器乱码的原因是什么？如何解决？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#19-%E6%B8%90%E8%BF%9B%E5%A2%9E%E5%BC%BA%E5%92%8C%E4%BC%98%E9%9B%85%E9%99%8D%E7%BA%A7%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">19. 渐进增强和优雅降级之间的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20-%E8%AF%B4%E4%B8%80%E4%B8%8B-HTML5-drag-API"><span class="nav-text">20. 说一下 HTML5 drag API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#21-%E4%B8%BA%E4%BB%80%E4%B9%88-script-%E6%A0%87%E7%AD%BE%E6%94%BE%E5%9C%A8-body-%E6%9C%80%E5%90%8E%EF%BC%8Ccss-%E6%94%BE%E5%9C%A8-head-%E9%87%8C%E9%9D%A2"><span class="nav-text">21. 为什么 script 标签放在 body 最后，css 放在 head 里面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#22-%E5%AF%BC%E5%85%A5-css-%E7%9A%84%E6%96%B9%E5%BC%8F%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BB%BA%E8%AE%AE%E7%94%A8-link-%E8%80%8C%E4%B8%8D%E6%98%AF-import%EF%BC%88%E8%A7%8102-CSS%EF%BC%89"><span class="nav-text">22. 导入 css 的方式，为什么建议用 link 而不是 @import（见02.CSS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#23-HTML-%E7%9A%84%E5%85%A8%E5%B1%80%E5%B1%9E%E6%80%A7"><span class="nav-text">23. HTML 的全局属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#24-Geolocation-API%EF%BC%88%E5%9C%B0%E7%90%86%E5%AE%9A%E4%BD%8D%EF%BC%89%E7%94%A8%E4%BA%8E%E5%AE%9A%E4%BD%8D%E7%94%A8%E6%88%B7%E7%9A%84%E4%BD%8D%E7%BD%AE%E3%80%82"><span class="nav-text">24. Geolocation API（地理定位）用于定位用户的位置。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#25-WebSockets"><span class="nav-text">25. WebSockets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#26-Communication-API"><span class="nav-text">26. Communication API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#27-lt-img-gt-title-%E5%92%8C-alt-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">27. &lt;img&gt; title 和 alt 的区别</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="鸢尾"
+      src="/images/shimei.jpg">
+  <p class="site-author-name" itemprop="name">鸢尾</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/atAurora" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;atAurora" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:468189840n@gmail.com" title="E-Mail → mailto:468189840n@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">鸢尾</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">33k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">59 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
